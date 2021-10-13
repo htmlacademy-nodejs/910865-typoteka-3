@@ -4,14 +4,27 @@ const fs = require(`fs`).promises;
 const chalk = require(`chalk`);
 
 const {
-  FILE_NAME, DEFAULT_COUNT, TITLES, CATEGORIES,
-  DESCRIPTIONS, MAX_ELEMENT_COUNT, MAX_ELEMENT_COUNT_MESSAGE,
-  MAX_ANNOUNCE_LENGTH, MAX_MONTH_DEVIATION, MONTHS_IN_YEAR,
+  FILE_NAME, DEFAULT_COUNT, MAX_ELEMENT_COUNT,
+  MAX_ELEMENT_COUNT_MESSAGE, MAX_ANNOUNCE_LENGTH,
+  MAX_MONTH_DEVIATION, MONTHS_IN_YEAR,
   DAYS_IN_MONTH, HOURS_IN_DAY, MINUTES_IN_HOUR,
   SECONDS_IN_MINUTE, MAX_SENTENCE_NUMBER, ExitCode,
-  MockGenerationStatus
+  MockGenerationStatus, FILE_CATEGORIES_PATH,
+  FILE_TITLES_PATH, FILE_SENTENCES_PATH
 } = require(`../../constants`);
 const { getRandomInt, shuffle } = require(`../../utils`);
+
+const readContent = async (filePath) => {
+  try {
+    const content = await fs.readFile(filePath, `utf-8`);
+
+    return content.trim().split(`\n`);
+  } catch (err) {
+    console.error(chalk.red(err));
+
+    return [];
+  }
+};
 
 const generateRandomDate = () => {
   const getRandomMonth = () => {
@@ -42,7 +55,7 @@ const generateRandomDate = () => {
   return (`${currentYear}-${getEditedDateElement(date.getMonth() + 1)}-${getEditedDateElement(date.getDate())} ${getEditedDateElement(date.getHours())}:${getEditedDateElement(date.getMinutes())}:${getEditedDateElement(date.getSeconds())}`);
 };
 
-const generateMocks = (count) => {
+const generateMocks = (count, sentences, titles, categories) => {
   if (count > MAX_ELEMENT_COUNT) {
     console.error(chalk.red(MAX_ELEMENT_COUNT_MESSAGE));
 
@@ -51,13 +64,13 @@ const generateMocks = (count) => {
 
   return Array(count).fill({}).map(() => {
     return {
-      title: TITLES[getRandomInt(0, TITLES.length - 1)],
-      announce: shuffle(TITLES).slice(0, getRandomInt(1, MAX_ANNOUNCE_LENGTH)).join(` `),
+      title: titles[getRandomInt(0, titles.length - 1)],
+      announce: shuffle(titles).slice(0, getRandomInt(1, MAX_ANNOUNCE_LENGTH)).join(` `),
       fullText: Array(MAX_SENTENCE_NUMBER).fill(``).map(() => {
-        return DESCRIPTIONS[getRandomInt(0, DESCRIPTIONS.length - 1)];
+        return sentences[getRandomInt(0, sentences.length - 1)];
       }).join(` `),
       createdDate: generateRandomDate(),
-      category: shuffle(CATEGORIES).slice(0, getRandomInt(0, CATEGORIES.length - 1)),
+      category: shuffle(categories).slice(0, getRandomInt(0, categories.length - 1)),
     }
   })
 };
@@ -65,9 +78,13 @@ const generateMocks = (count) => {
 module.exports = {
   name: `--generate`,
   async run(args) {
+    const sentences = await readContent(FILE_SENTENCES_PATH);
+    const categories = await readContent(FILE_CATEGORIES_PATH);
+    const titles = await readContent(FILE_TITLES_PATH);
+
     const [count] = args;
     const noteCount = Number.parseInt(count, 10) || DEFAULT_COUNT;
-    const data = JSON.stringify(generateMocks(noteCount));
+    const data = JSON.stringify(generateMocks(noteCount, sentences, titles, categories));
 
     try {
       await fs.writeFile(FILE_NAME, data);
