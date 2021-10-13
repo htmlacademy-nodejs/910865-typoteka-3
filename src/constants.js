@@ -1,5 +1,7 @@
 const DEFAULT_COMMAND = `--help`;
 
+const DEFAULT_PORT = 3000;
+
 const FILE_SENTENCES_PATH = `./data/sentences.txt`;
 
 const FILE_TITLES_PATH = `./data/titles.txt`;
@@ -15,6 +17,8 @@ const DEFAULT_COUNT = 1;
 const MAX_ELEMENT_COUNT = 1000;
 
 const MAX_ELEMENT_COUNT_MESSAGE = `Не больше 1000 публикаций`;
+
+const NOT_FOUND_ERROR_MESSAGE = `Не найдено`;
 
 const MockGenerationStatus = {
   success: `Успешно`,
@@ -42,8 +46,17 @@ const ExitCode = {
   success: 0,
 };
 
+const HttpCode = {
+  OK: 200,
+  NOT_FOUND: 404,
+  INTERNAL_SERVER_ERROR: 500,
+  FORBIDDEN: 403,
+  UNAUTHORIZED: 401,
+};
+
 module.exports = {
   DEFAULT_COUNT,
+  DEFAULT_PORT,
   FILE_SENTENCES_PATH,
   FILE_CATEGORIES_PATH,
   FILE_TITLES_PATH,
@@ -61,5 +74,7 @@ module.exports = {
   MINUTES_IN_HOUR,
   SECONDS_IN_MINUTE,
   ExitCode,
+  HttpCode,
   MockGenerationStatus,
+  NOT_FOUND_ERROR_MESSAGE
 };
