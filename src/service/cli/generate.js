@@ -1,13 +1,15 @@
 'use strict';
 
-const fs = require(`fs`);
+const fs = require(`fs`).promises;
+const chalk = require(`chalk`);
 
 const {
   FILE_NAME, DEFAULT_COUNT, TITLES, CATEGORIES,
   DESCRIPTIONS, MAX_ELEMENT_COUNT, MAX_ELEMENT_COUNT_MESSAGE,
   MAX_ANNOUNCE_LENGTH, MAX_MONTH_DEVIATION, MONTHS_IN_YEAR,
   DAYS_IN_MONTH, HOURS_IN_DAY, MINUTES_IN_HOUR,
-  SECONDS_IN_MINUTE, MAX_SENTENCE_NUMBER, ExitCode
+  SECONDS_IN_MINUTE, MAX_SENTENCE_NUMBER, ExitCode,
+  MockGenerationStatus
 } = require(`../../constants`);
 const { getRandomInt, shuffle } = require(`../../utils`);
 
@@ -42,7 +44,7 @@ const generateRandomDate = () => {
 
 const generateMocks = (count) => {
   if (count > MAX_ELEMENT_COUNT) {
-    console.info(MAX_ELEMENT_COUNT_MESSAGE);
+    console.error(chalk.red(MAX_ELEMENT_COUNT_MESSAGE));
 
     process.exit(ExitCode.success);
   }
@@ -62,17 +64,18 @@ const generateMocks = (count) => {
 
 module.exports = {
   name: `--generate`,
-  run(args) {
+  async run(args) {
     const [count] = args;
     const noteCount = Number.parseInt(count, 10) || DEFAULT_COUNT;
     const data = JSON.stringify(generateMocks(noteCount));
 
-    fs.writeFile(FILE_NAME, data, (err) => {
-      if (err) {
-        process.exit(ExitCode.error);
-      }
-
+    try {
+      await fs.writeFile(FILE_NAME, data);
+      console.info(chalk.green(MockGenerationStatus.success));
       process.exit(ExitCode.success);
-    });
+    } catch (err) {
+      console.error(chalk.red(MockGenerationStatus.error));
+      process.exit(ExitCode.error);
+    }
   }
 };

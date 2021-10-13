@@ -60,6 +60,11 @@ const MAX_ELEMENT_COUNT = 1000;
 
 const MAX_ELEMENT_COUNT_MESSAGE = `Не больше 1000 публикаций`;
 
+const MockGenerationStatus = {
+  success: `Успешно`,
+  error: `Неудачно`,
+};
+
 const MAX_ANNOUNCE_LENGTH = 5;
 
 const MAX_SENTENCE_NUMBER = 40;
@@ -100,4 +105,5 @@ module.exports = {
   MINUTES_IN_HOUR,
   SECONDS_IN_MINUTE,
   ExitCode,
+  MockGenerationStatus,
 };
