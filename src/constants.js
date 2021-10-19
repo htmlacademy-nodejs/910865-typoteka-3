@@ -1,6 +1,6 @@
 const DEFAULT_COMMAND = `--help`;
 
-const DEFAULT_PORT = 3000;
+const DEFAULT_PORT = 8080;
 
 const FILE_SENTENCES_PATH = `./data/sentences.txt`;
 
