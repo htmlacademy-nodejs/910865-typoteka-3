@@ -4,11 +4,10 @@ const http = require(`http`);
 const chalk = require(`chalk`);
 const fs = require(`fs`).promises;
 
-const { DEFAULT_PORT, FILE_NAME, HttpCode, NOT_FOUND_ERROR_MESSAGE } = require(`../../constants`);
+const {DEFAULT_PORT, FILE_NAME, HttpCode, NOT_FOUND_ERROR_MESSAGE} = require(`../../constants`);
 
-const onClientConnect = async (req, res) => {
-  const sendResponse = (res, statusCode, msg) => {
-    const template = `
+const sendResponse = (res, statusCode, msg) => {
+  const template = `
   <!Doctype html>
     <html lang="ru">
       <head>
@@ -18,13 +17,14 @@ const onClientConnect = async (req, res) => {
     </html>
   `.trim();
 
-    res.writeHead(statusCode, {
-      'Content-Type': `text/html; charset=UTF-8`,
-    });
+  res.writeHead(statusCode, {
+    'Content-Type': `text/html; charset=UTF-8`,
+  });
 
-    res.end(template);
-  };
+  res.end(template);
+};
 
+const onClientConnect = async (req, res) => {
   switch (req.url) {
     case `/`:
       try {
@@ -34,7 +34,7 @@ const onClientConnect = async (req, res) => {
 
         sendResponse(res, HttpCode.OK, `<ul>${message}</ul>`);
       } catch (err) {
-        sendResponse(res, HttpCode.NOT_FOUND, NOT_FOUND_ERROR_MESSAGE)
+        sendResponse(res, HttpCode.NOT_FOUND, NOT_FOUND_ERROR_MESSAGE);
       }
 
       break;
@@ -57,7 +57,7 @@ module.exports = {
       .on(`listening`, () => {
         console.info(chalk.green(`Ожидаю соединений на ${userPort}`));
       })
-      .on(`error`, ({ message }) => {
+      .on(`error`, ({message}) => {
         console.info(chalk.red(`Ошибка при создании сервера: ${message}`));
       });
   }

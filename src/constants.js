@@ -1,3 +1,5 @@
+'use strict';
+
 const DEFAULT_COMMAND = `--help`;
 
 const DEFAULT_PORT = 8080;
