@@ -12,7 +12,7 @@ const {
   MockGenerationStatus, FILE_CATEGORIES_PATH,
   FILE_TITLES_PATH, FILE_SENTENCES_PATH
 } = require(`../../constants`);
-const { getRandomInt, shuffle } = require(`../../utils`);
+const {getRandomInt, shuffle} = require(`../../utils`);
 
 const readContent = async (filePath) => {
   try {
@@ -71,8 +71,8 @@ const generateMocks = (count, sentences, titles, categories) => {
       }).join(` `),
       createdDate: generateRandomDate(),
       category: shuffle(categories).slice(0, getRandomInt(0, categories.length - 1)),
-    }
-  })
+    };
+  });
 };
 
 module.exports = {

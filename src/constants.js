@@ -1,3 +1,5 @@
+'use strict';
+
 const DEFAULT_COMMAND = `--help`;
 
 const DEFAULT_PORT = 8080;
@@ -11,6 +13,10 @@ const FILE_CATEGORIES_PATH = `./data/categories.txt`;
 const USER_ARGV_INDEX = 2;
 
 const FILE_NAME = `mocks.json`;
+
+const PUBLIC_DIR = `public`;
+
+const TEMPLATES_DIR = `templates`;
 
 const DEFAULT_COUNT = 1;
 
@@ -76,5 +82,7 @@ module.exports = {
   ExitCode,
   HttpCode,
   MockGenerationStatus,
-  NOT_FOUND_ERROR_MESSAGE
+  NOT_FOUND_ERROR_MESSAGE,
+  PUBLIC_DIR,
+  TEMPLATES_DIR
 };
