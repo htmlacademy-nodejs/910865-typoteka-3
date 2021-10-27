@@ -2,23 +2,14 @@
 
 const express = require(`express`);
 const chalk = require(`chalk`);
-const fs = require(`fs`).promises;
 
-const {DEFAULT_PORT, FILE_NAME, HttpCode, NOT_FOUND_ERROR_MESSAGE} = require(`../../constants`);
+const mainRoutes = require(`./routes/main-routes/main-routes`);
+const {DEFAULT_PORT, HttpCode, NOT_FOUND_ERROR_MESSAGE} = require(`../../constants`);
 
 const app = express();
 
 app.use(express.json());
-app.get(`/posts`, async (req, res) => {
-  try {
-    const fileContent = await fs.readFile(FILE_NAME);
-    const mocks = JSON.parse(fileContent);
-
-    res.json(mocks);
-  } catch (err) {
-    res.send([]);
-  }
-});
+app.use(`/`, mainRoutes);
 app.use((req, res) => res
   .status(HttpCode.NOT_FOUND)
   .send(NOT_FOUND_ERROR_MESSAGE));
