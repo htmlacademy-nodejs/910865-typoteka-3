@@ -2,15 +2,13 @@
 
 const DEFAULT_COMMAND = `--help`;
 
-const DEFAULT_PORT = 8080;
-
 const FILE_SENTENCES_PATH = `./data/sentences.txt`;
 
 const FILE_TITLES_PATH = `./data/titles.txt`;
 
 const FILE_CATEGORIES_PATH = `./data/categories.txt`;
 
-const USER_ARGV_INDEX = 2;
+const FILE_COMMENTS_PATH = `./data/comments.txt`;
 
 const FILE_NAME = `mocks.json`;
 
@@ -18,18 +16,21 @@ const PUBLIC_DIR = `public`;
 
 const TEMPLATES_DIR = `templates`;
 
-const DEFAULT_COUNT = 1;
-
-const MAX_ELEMENT_COUNT = 1000;
-
 const MAX_ELEMENT_COUNT_MESSAGE = `Не больше 1000 публикаций`;
 
 const NOT_FOUND_ERROR_MESSAGE = `Не найдено`;
 
-const MockGenerationStatus = {
-  success: `Успешно`,
-  error: `Неудачно`,
-};
+const USER_ARGV_INDEX = 2;
+
+const DEFAULT_COUNT = 1;
+
+const MAX_ELEMENT_COUNT = 1000;
+
+const DEFAULT_PORT = 8080;
+
+const MAX_ID_LENGTH = 6;
+
+const MAX_COMMENTS_NUMBER = 3;
 
 const MAX_ANNOUNCE_LENGTH = 5;
 
@@ -60,6 +61,16 @@ const HttpCode = {
   UNAUTHORIZED: 401,
 };
 
+const MockGenerationStatus = {
+  success: `Успешно`,
+  error: `Неудачно`,
+};
+
+const PiecesInComment = {
+  min: 1,
+  max: 3
+};
+
 module.exports = {
   DEFAULT_COUNT,
   DEFAULT_PORT,
@@ -84,5 +95,9 @@ module.exports = {
   MockGenerationStatus,
   NOT_FOUND_ERROR_MESSAGE,
   PUBLIC_DIR,
-  TEMPLATES_DIR
+  TEMPLATES_DIR,
+  MAX_ID_LENGTH,
+  FILE_COMMENTS_PATH,
+  MAX_COMMENTS_NUMBER,
+  PiecesInComment
 };

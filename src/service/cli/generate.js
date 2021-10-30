@@ -2,6 +2,7 @@
 
 const fs = require(`fs`).promises;
 const chalk = require(`chalk`);
+const {nanoid} = require(`nanoid`);
 
 const {
   FILE_NAME, DEFAULT_COUNT, MAX_ELEMENT_COUNT,
@@ -10,7 +11,8 @@ const {
   DAYS_IN_MONTH, HOURS_IN_DAY, MINUTES_IN_HOUR,
   SECONDS_IN_MINUTE, MAX_SENTENCE_NUMBER, ExitCode,
   MockGenerationStatus, FILE_CATEGORIES_PATH,
-  FILE_TITLES_PATH, FILE_SENTENCES_PATH
+  FILE_TITLES_PATH, FILE_SENTENCES_PATH, MAX_ID_LENGTH,
+  FILE_COMMENTS_PATH, MAX_COMMENTS_NUMBER, PiecesInComment
 } = require(`../../constants`);
 const {getRandomInt, shuffle} = require(`../../utils`);
 
@@ -55,7 +57,16 @@ const generateRandomDate = () => {
   return (`${currentYear}-${getEditedDateElement(date.getMonth() + 1)}-${getEditedDateElement(date.getDate())} ${getEditedDateElement(date.getHours())}:${getEditedDateElement(date.getMinutes())}:${getEditedDateElement(date.getSeconds())}`);
 };
 
-const generateMocks = (count, sentences, titles, categories) => {
+const generateComments = (count, comments) => {
+  return Array(count).fill({}).map((it, index) => {
+    return {
+      id: nanoid(MAX_ID_LENGTH),
+      text: shuffle(comments).slice(0, getRandomInt(PiecesInComment.min, PiecesInComment.max)).join(` `),
+    };
+  });
+};
+
+const generateMocks = (count, sentences, titles, categories, comments) => {
   if (count > MAX_ELEMENT_COUNT) {
     console.error(chalk.red(MAX_ELEMENT_COUNT_MESSAGE));
 
@@ -64,6 +75,8 @@ const generateMocks = (count, sentences, titles, categories) => {
 
   return Array(count).fill({}).map(() => {
     return {
+      id: nanoid(MAX_ID_LENGTH),
+      comments: generateComments(getRandomInt(1, MAX_COMMENTS_NUMBER), comments),
       title: titles[getRandomInt(0, titles.length - 1)],
       announce: shuffle(titles).slice(0, getRandomInt(1, MAX_ANNOUNCE_LENGTH)).join(` `),
       fullText: Array(MAX_SENTENCE_NUMBER).fill(``).map(() => {
@@ -81,10 +94,11 @@ module.exports = {
     const sentences = await readContent(FILE_SENTENCES_PATH);
     const categories = await readContent(FILE_CATEGORIES_PATH);
     const titles = await readContent(FILE_TITLES_PATH);
+    const comments = await readContent(FILE_COMMENTS_PATH);
 
     const [count] = args;
     const noteCount = Number.parseInt(count, 10) || DEFAULT_COUNT;
-    const data = JSON.stringify(generateMocks(noteCount, sentences, titles, categories));
+    const data = JSON.stringify(generateMocks(noteCount, sentences, titles, categories, comments));
 
     try {
       await fs.writeFile(FILE_NAME, data);
