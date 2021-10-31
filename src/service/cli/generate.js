@@ -58,7 +58,7 @@ const generateRandomDate = () => {
 };
 
 const generateComments = (count, comments) => {
-  return Array(count).fill({}).map((it, index) => {
+  return Array(count).fill({}).map(() => {
     return {
       id: nanoid(MAX_ID_LENGTH),
       text: shuffle(comments).slice(0, getRandomInt(PiecesInComment.min, PiecesInComment.max)).join(` `),
