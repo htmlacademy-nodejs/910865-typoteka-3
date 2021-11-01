@@ -20,6 +20,10 @@ const MAX_ELEMENT_COUNT_MESSAGE = `Не больше 1000 публикаций`;
 
 const NOT_FOUND_ERROR_MESSAGE = `Не найдено`;
 
+const BAD_REQUEST_MESSAGE = `Bad request`;
+
+const ARTICLE_KEYS = [`title`, `announce`, `fullText`, `createdDate`, `category`];
+
 const USER_ARGV_INDEX = 2;
 
 const DEFAULT_COUNT = 1;
@@ -59,6 +63,9 @@ const HttpCode = {
   INTERNAL_SERVER_ERROR: 500,
   FORBIDDEN: 403,
   UNAUTHORIZED: 401,
+  CREATED: 201,
+  EMPTY_LIST: 204,
+  BAD_REQUEST: 400,
 };
 
 const MockGenerationStatus = {
@@ -99,5 +106,7 @@ module.exports = {
   MAX_ID_LENGTH,
   FILE_COMMENTS_PATH,
   MAX_COMMENTS_NUMBER,
-  PiecesInComment
+  PiecesInComment,
+  BAD_REQUEST_MESSAGE,
+  ARTICLE_KEYS
 };
