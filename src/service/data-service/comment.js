@@ -6,6 +6,10 @@ const {MAX_ID_LENGTH} = require(`../../constants`);
 
 class CommentService {
   drop(article, id) {
+    if (!article.comments[id]) {
+      return null;
+    }
+
     return article.comments.filter((it) => it.id !== id);
   }
 

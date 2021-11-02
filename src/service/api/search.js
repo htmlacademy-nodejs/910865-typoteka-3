@@ -10,6 +10,6 @@ module.exports = (app, searchService) => {
   searchRoutes.get(`/`, (req, res) => {
     const {query} = req.query;
 
-    return res.json(searchService.findMatching(query));
+    res.json(searchService.findMatching(query));
   });
 };

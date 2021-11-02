@@ -5,14 +5,14 @@ const {Router} = require(`express`);
 const articleValidator = require(`../middlewares/article-validator`);
 const articleExist = require(`../middlewares/article-exists`);
 
-const {HttpCode} = require(`../../constants`);
+const {HttpCode, NOT_FOUND_ERROR_MESSAGE} = require(`../../constants`);
 
 const articleRoutes = new Router();
 
 module.exports = (app, articleService, commentService) => {
   app.use(`/articles`, articleRoutes);
 
-  articleRoutes.get(`/`, async (req, res) => {
+  articleRoutes.get(`/`, (req, res) => {
     const articles = articleService.findAll();
 
     res.status(HttpCode.OK)
@@ -47,19 +47,24 @@ module.exports = (app, articleService, commentService) => {
       .json(article);
   });
 
-  articleRoutes.put(`/:articleId`, (req, res) => {
+  articleRoutes.put(`/:articleId`, [articleValidator, articleExist(articleService)], (req, res) => {
     const {articleId} = req.params;
     const article = articleService.update(articleId, req.body);
 
     res.status(HttpCode.OK)
-      .json(article);
+      .json(article); // ? http req with bad obj or bad articleId causes err
   });
 
   articleRoutes.delete(`/:articleId`, (req, res) => {
     const {articleId} = req.params;
     const article = articleService.drop(articleId);
 
-    res.status(HttpCode.OK)
+    if (!article) {
+      return res.status(HttpCode.NOT_FOUND)
+        .send(NOT_FOUND_ERROR_MESSAGE);
+    }
+
+    return res.status(HttpCode.OK)
       .json(article);
   });
 
