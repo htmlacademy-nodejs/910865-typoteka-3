@@ -52,7 +52,7 @@ module.exports = (app, articleService, commentService) => {
     const article = articleService.update(articleId, req.body);
 
     res.status(HttpCode.OK)
-      .json(article); // ? http req with bad obj or bad articleId causes err
+      .json(article);
   });
 
   articleRoutes.delete(`/:articleId`, (req, res) => {
