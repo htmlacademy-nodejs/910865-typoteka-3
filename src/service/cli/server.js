@@ -3,13 +3,14 @@
 const express = require(`express`);
 const chalk = require(`chalk`);
 
-const mainRoutes = require(`./routes/main-routes/main-routes`);
+const routes = require(`../api`);
+
 const {DEFAULT_PORT, HttpCode, NOT_FOUND_ERROR_MESSAGE} = require(`../../constants`);
 
 const app = express();
 
 app.use(express.json());
-app.use(`/`, mainRoutes);
+app.use(`/api`, routes);
 app.use((req, res) => res
   .status(HttpCode.NOT_FOUND)
   .send(NOT_FOUND_ERROR_MESSAGE));
