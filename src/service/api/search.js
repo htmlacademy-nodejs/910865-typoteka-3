@@ -11,19 +11,19 @@ module.exports = (app, searchService) => {
 
   searchRoutes.get(`/`, (req, res) => {
     const {query = ``} = req.query;
-
-    if (!query) {
-      res.statusCode(HttpCode.BAD_REQUEST).json([]);
-    }
-
     const searchResults = searchService.findMatching(query);
 
-    if (searchResults.length === 0) {
-      res.statusCode(HttpCode.NOT_FOUND);
-
-      return;
+    if (!query) {
+      return res.status(HttpCode.BAD_REQUEST)
+        .json([]);
     }
 
-    res.statusCode(HttpCode.OK).json(searchResults);
+    if (searchResults.length === 0) {
+      return res.status(HttpCode.NOT_FOUND)
+        .json([]);
+    }
+
+    return res.status(HttpCode.OK)
+      .json(searchResults);
   });
 };

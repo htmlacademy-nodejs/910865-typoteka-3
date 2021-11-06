@@ -1,8 +1,8 @@
 'use strict';
 
 class SearchService {
-  constructor(article) {
-    this._articles = article;
+  constructor(articles) {
+    this._articles = articles;
   }
 
   findMatching(query) {
@@ -15,7 +15,7 @@ class SearchService {
     return this._articles.filter((article) => {
       const formattedWords = getKeysFromString(query);
 
-      return (formattedWords.some((formattedWord) => article.title.toLowerCase().includes(formattedWord)));
+      return formattedWords.some((formattedWord) => article.title.toLowerCase().includes(formattedWord));
     });
   }
 }
