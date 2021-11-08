@@ -79,9 +79,15 @@ module.exports = (app, articleService, commentService) => {
 
   articleRoutes.post(`/:articleId/comments`, articleExist(articleService), (req, res) => {
     const {article} = res.locals;
-    const comment = commentService.create(article, req.body);
+    const {text} = req.body;
 
-    res.status(HttpCode.CREATED)
+    if (!text) {
+      return res.status(HttpCode.BAD_REQUEST).json([]);
+    }
+
+    const comment = commentService.create(article, text);
+
+    return res.status(HttpCode.CREATED)
       .json(comment);
   });
 };

@@ -13,5 +13,5 @@ module.exports = (req, res, next) => {
       .send(BAD_REQUEST_MESSAGE);
   }
 
-  next();
+  return next();
 };
