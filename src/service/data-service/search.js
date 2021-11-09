@@ -1,16 +1,21 @@
 'use strict';
 
 class SearchService {
-  constructor(article) {
-    this._articles = article;
+  constructor(articles) {
+    this._articles = articles;
   }
 
   findMatching(query) {
-    return this._articles.filter((article) => {
-      const wordsInTitles = article.title.replace(/[.,?!]/g, ``).split(` `);
-      const formattedWords = wordsInTitles.map((word) => word.toLowerCase());
+    const getKeysFromString = (str) => {
+      const words = str.replace(/[.,?!]/g, ``).split(` `);
 
-      return (formattedWords.some((formattedWord) => formattedWord === query.toLowerCase()));
+      return words.map((word) => word.toLowerCase());
+    };
+
+    return this._articles.filter((article) => {
+      const formattedWords = getKeysFromString(query);
+
+      return formattedWords.some((formattedWord) => article.title.toLowerCase().includes(formattedWord));
     });
   }
 }

@@ -1,7 +1,7 @@
 # Личный проект «Типотека» [![Build status][travis-image]][travis-url]
 
 * Студент: [Озхан Мамедов](https://up.htmlacademy.ru/nodejs/3/user/910865).
-* Наставник: [Роман Шестернин](https://htmlacademy.ru/profile/id1831979).
+* Наставник: [Руслан Малогулько](https://htmlacademy.ru/profile/id9728).
 
 ---
 

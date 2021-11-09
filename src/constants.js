@@ -16,9 +16,9 @@ const PUBLIC_DIR = `public`;
 
 const TEMPLATES_DIR = `templates`;
 
-const MAX_ELEMENT_COUNT_MESSAGE = `Не больше 1000 публикаций`;
+const MAX_ELEMENT_COUNT_MESSAGE = `No more than 1000 publications`;
 
-const NOT_FOUND_ERROR_MESSAGE = `Не найдено`;
+const NOT_FOUND_ERROR_MESSAGE = `Not found`;
 
 const BAD_REQUEST_MESSAGE = `Bad request`;
 
@@ -69,8 +69,13 @@ const HttpCode = {
 };
 
 const MockGenerationStatus = {
-  success: `Успешно`,
-  error: `Неудачно`,
+  success: `Operation success. File created.`,
+  error: `Can't write data to file...`,
+};
+
+const Env = {
+  DEVELOPMENT: `development`,
+  PRODUCTION: `production`,
 };
 
 const PiecesInComment = {
@@ -108,5 +113,6 @@ module.exports = {
   MAX_COMMENTS_NUMBER,
   PiecesInComment,
   BAD_REQUEST_MESSAGE,
-  ARTICLE_KEYS
+  ARTICLE_KEYS,
+  Env,
 };

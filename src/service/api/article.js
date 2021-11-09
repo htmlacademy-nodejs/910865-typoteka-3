@@ -52,7 +52,7 @@ module.exports = (app, articleService, commentService) => {
     const article = articleService.update(articleId, req.body);
 
     res.status(HttpCode.OK)
-      .json(article); // ? http req with bad obj or bad articleId causes err
+      .json(article);
   });
 
   articleRoutes.delete(`/:articleId`, (req, res) => {
@@ -79,9 +79,15 @@ module.exports = (app, articleService, commentService) => {
 
   articleRoutes.post(`/:articleId/comments`, articleExist(articleService), (req, res) => {
     const {article} = res.locals;
-    const comment = commentService.create(article, req.body);
+    const {text} = req.body;
 
-    res.status(HttpCode.CREATED)
+    if (!text) {
+      return res.status(HttpCode.BAD_REQUEST).json([]);
+    }
+
+    const comment = commentService.create(article, text);
+
+    return res.status(HttpCode.CREATED)
       .json(comment);
   });
 };
