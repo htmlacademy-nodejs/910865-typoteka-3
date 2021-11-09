@@ -44,7 +44,7 @@ module.exports = {
       });
     } catch (err) {
       logger.error(`An error occurred: ${err.message}`);
-      process.exit(ExitCode.error)
+      process.exit(ExitCode.error);
     }
   }
 };
