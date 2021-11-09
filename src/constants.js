@@ -12,6 +12,8 @@ const FILE_COMMENTS_PATH = `./data/comments.txt`;
 
 const FILE_NAME = `mocks.json`;
 
+const LOG_FILE = `./logs/api.log`;
+
 const PUBLIC_DIR = `public`;
 
 const TEMPLATES_DIR = `templates`;
@@ -73,6 +75,11 @@ const MockGenerationStatus = {
   error: `Can't write data to file...`,
 };
 
+const Env = {
+  DEVELOPMENT: `development`,
+  PRODUCTION: `production`,
+};
+
 const PiecesInComment = {
   min: 1,
   max: 3
@@ -85,6 +92,7 @@ module.exports = {
   FILE_CATEGORIES_PATH,
   FILE_TITLES_PATH,
   FILE_NAME,
+  LOG_FILE,
   USER_ARGV_INDEX,
   DEFAULT_COMMAND,
   MAX_ELEMENT_COUNT,
@@ -108,5 +116,6 @@ module.exports = {
   MAX_COMMENTS_NUMBER,
   PiecesInComment,
   BAD_REQUEST_MESSAGE,
-  ARTICLE_KEYS
+  ARTICLE_KEYS,
+  Env,
 };
