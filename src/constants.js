@@ -12,8 +12,6 @@ const FILE_COMMENTS_PATH = `./data/comments.txt`;
 
 const FILE_NAME = `mocks.json`;
 
-const LOG_FILE = `./logs/api.log`;
-
 const PUBLIC_DIR = `public`;
 
 const TEMPLATES_DIR = `templates`;
@@ -92,7 +90,6 @@ module.exports = {
   FILE_CATEGORIES_PATH,
   FILE_TITLES_PATH,
   FILE_NAME,
-  LOG_FILE,
   USER_ARGV_INDEX,
   DEFAULT_COMMAND,
   MAX_ELEMENT_COUNT,
