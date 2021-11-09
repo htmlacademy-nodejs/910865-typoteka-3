@@ -268,6 +268,7 @@ describe(`API workds correcty if trying to delete non-existent article`, () => {
       .delete(`/articles/err`)
       .expect(HttpCode.NOT_FOUND);
   });
+
   test(`API returns correct amount of articles if non-existent article being deleted`, () => {
     request(app)
         .get(`/articles`)
@@ -286,21 +287,6 @@ describe(`API workds correctly while trying to post a comment`, () => {
         text: `test article text`
       });
   })();
-
-  /*
-  Подобная проблема встречается только у маршрутов
-  1) get(`/:articleId/comments`)
-  2) delete(`/:articleId/comments/:commentId`)
-  3) post(`/:articleId/comments`)
-  их объединяет наличие articleExist(articleService) в аргументе вызова метода HTTP запроса (middleware)
-  beforeAll(async () => {
-    response = await request(app)
-      .post(`/articles/A4xusS/comments`)
-      .send({
-        text: `test article text`
-      });
-  });
-  */
 
   test(`Returns status code 201`, () => expect(response.statusCode).toBe(HttpCode.CREATED));
   test(`Returns correct amount of comments`, () => {
