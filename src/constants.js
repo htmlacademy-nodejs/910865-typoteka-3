@@ -30,6 +30,8 @@ const DEFAULT_COUNT = 1;
 
 const MAX_ELEMENT_COUNT = 1000;
 
+const API_TIMEOUT = 1000;
+
 const DEFAULT_PORT = 8080;
 
 const MAX_ID_LENGTH = 6;
@@ -115,4 +117,5 @@ module.exports = {
   BAD_REQUEST_MESSAGE,
   ARTICLE_KEYS,
   Env,
+  API_TIMEOUT,
 };
