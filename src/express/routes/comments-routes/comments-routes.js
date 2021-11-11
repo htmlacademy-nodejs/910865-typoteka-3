@@ -2,9 +2,20 @@
 
 const {Router} = require(`express`);
 
-const commentsRouter = new Router();
+const {getAPI} = require(`../../api`);
 
-commentsRouter.get(`/`, (req, res) => res.render(`comments/my`, {wrapper: {class: `wrapper, wrapper--nobackground`}}));
-commentsRouter.get(`/comments`, (req, res) => res.render(`comments/comments`, {wrapper: {class: `wrapper, wrapper--nobackground`}}));
+const commentsRouter = new Router();
+const api = getAPI();
+
+commentsRouter.get(`/`, async (req, res) => {
+  const articles = await api.getArticles();
+
+  res.render(`comments/my`, {wrapper: {class: `wrapper, wrapper--nobackground`}, articles});
+});
+commentsRouter.get(`/comments`, async (req, res) => {
+  const articles = await api.getArticles();
+
+  res.render(`comments/comments`, {wrapper: {class: `wrapper, wrapper--nobackground`}, articles});
+});
 
 module.exports = commentsRouter;
