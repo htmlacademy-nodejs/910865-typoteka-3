@@ -10,6 +10,8 @@ const {DEFAULT_PORT, PUBLIC_DIR, TEMPLATES_DIR, HttpCode} = require(`../constant
 
 const app = express();
 
+app.use(express.urlencoded({extended: true}));
+app.use(express.json());
 app.use(`/`, mainRoutes);
 app.use(`/articles`, articlesRoutes);
 app.use(`/my`, commentsRoutes);

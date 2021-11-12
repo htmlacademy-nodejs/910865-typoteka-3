@@ -1,0 +1,17 @@
+extends ../layout
+
+block content
+  main
+    section.search-page
+      .search-page__wrapper
+        h1 Поиск
+        .search.search-page__form
+          form(action='/search' method='get' autocomplete="off")
+            label
+              input(type='text' name='query' placeholder='Что ищем?' value='Путешествия')
+            button.search__button.button.button--transparent(type='submit') Найти
+          each article in results
+            .search__result
+              +fullDate(`search__date`, article.createdDate)
+              a.search__link
+                | #{article.title}
