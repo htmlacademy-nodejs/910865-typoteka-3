@@ -12,7 +12,8 @@ const {
   SECONDS_IN_MINUTE, MAX_SENTENCE_NUMBER, ExitCode,
   MockGenerationStatus, FILE_CATEGORIES_PATH,
   FILE_TITLES_PATH, FILE_SENTENCES_PATH, MAX_ID_LENGTH,
-  FILE_COMMENTS_PATH, MAX_COMMENTS_NUMBER, PiecesInComment
+  FILE_COMMENTS_PATH, MAX_COMMENTS_NUMBER, PiecesInComment,
+  ARTICLE_PICTURES
 } = require(`../../constants`);
 const {getRandomInt, shuffle} = require(`../../utils`);
 
@@ -74,6 +75,20 @@ const generateMocks = (count, sentences, titles, categories, comments) => {
   }
 
   return Array(count).fill({}).map(() => {
+    const randomImageIndex = getRandomInt(0, ARTICLE_PICTURES.length - 1);
+    const randomPictureName = ARTICLE_PICTURES[randomImageIndex];
+    const hasPictures = Math.random() < 0.5;
+    let pictures = [];
+    let fullSizePictures = [];
+
+    if (hasPictures) {
+      pictures = [`${randomPictureName}@1x.jpg`, `${randomPictureName}@2x.jpg`];
+
+      if (randomPictureName === `sea`) {
+        fullSizePictures = [`sea-fullsize@1x.jpg`, `sea-fullsize@2x.jpg`];
+      }
+    }
+
     return {
       id: nanoid(MAX_ID_LENGTH),
       comments: generateComments(getRandomInt(1, MAX_COMMENTS_NUMBER), comments),
@@ -82,6 +97,8 @@ const generateMocks = (count, sentences, titles, categories, comments) => {
       fullText: Array(MAX_SENTENCE_NUMBER).fill(``).map(() => {
         return sentences[getRandomInt(0, sentences.length - 1)];
       }).join(` `),
+      pictures,
+      fullSizePictures,
       createdDate: generateRandomDate(),
       category: shuffle(categories).slice(0, getRandomInt(0, categories.length - 1)),
     };
