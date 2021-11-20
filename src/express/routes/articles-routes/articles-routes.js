@@ -34,7 +34,18 @@ articlesRouter.post(`/add`, upload.single(`upload`), (req, res, next) => {
     res.redirect(`back`);
   }
 });
-articlesRouter.get(`/edit/:id`, async (req, res) => {
+articlesRouter.get(`/edit/:id`, async (req, res, next) => {
+  const articles = await api.getArticles();
+  let ids = [];
+
+  articles.forEach((article) => ids.push(article.id));
+
+  if (!ids.includes(req.params.id)) {
+    return res.render(`errors/404`);
+  }
+
+  return next();
+}, async (req, res) => {
   const {id} = req.params;
   const article = await api.getArticle(id);
 
