@@ -22,7 +22,13 @@ const NOT_FOUND_ERROR_MESSAGE = `Not found`;
 
 const BAD_REQUEST_MESSAGE = `Bad request`;
 
-const ARTICLE_KEYS = [`title`, `announce`, `fullText`, `createdDate`, `category`];
+const ARTICLE_KEYS = [`title`, `announce`, `fullText`, `createdDate`, `category`, `pictures`];
+
+const ARTICLE_PICTURES = [`forest`, `sea`, `skyscraper`];
+
+const FILE_EXTENSIONS = [`.jpg`, `.png`, `.webp`];
+
+const UPLOAD_DIR = `../upload/img`;
 
 const USER_ARGV_INDEX = 2;
 
@@ -68,6 +74,7 @@ const HttpCode = {
   CREATED: 201,
   EMPTY_LIST: 204,
   BAD_REQUEST: 400,
+  UNPROCESSABLE_ENTITY: 422,
 };
 
 const MockGenerationStatus = {
@@ -118,4 +125,7 @@ module.exports = {
   ARTICLE_KEYS,
   Env,
   API_TIMEOUT,
+  ARTICLE_PICTURES,
+  FILE_EXTENSIONS,
+  UPLOAD_DIR
 };
