@@ -6,8 +6,8 @@
   "scripts": {
     "test": "npm run eslint && npm run jest",
     "eslint": "eslint --ext .js src/",
-    "start": "cross-env LOG_LEVEL=error nodemon ./src/service/service.js --server 3000",
-    "start::debug": "cross-env NODE_ENV=development LOG_LEVEL=info nodemon ./src/service/service.js --server 3000",
+    "start": "cross-env LOG_LEVEL=error nodemon -r dotenv/config ./src/service/service.js --server 3000",
+    "start::debug": "cross-env NODE_ENV=development LOG_LEVEL=info nodemon -r dotenv/config ./src/service/service.js --server 3000",
     "start-front-server": "nodemon ./src/express/express.js",
     "jest": "jest"
   },
