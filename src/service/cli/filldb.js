@@ -2,20 +2,24 @@
 
 const fs = require(`fs`).promises;
 const chalk = require(`chalk`);
-const {nanoid} = require(`nanoid`);
 
+const Aliase = require(`../models/aliase`);
+const sequelize = require(`../lib/sequelize`);
+const defineModels = require(`../models`);
+const {getLogger} = require(`../lib/logger`);
 const {
-  FILE_NAME, DEFAULT_COUNT, MAX_ELEMENT_COUNT,
+  DEFAULT_COUNT, MAX_ELEMENT_COUNT,
   MAX_ELEMENT_COUNT_MESSAGE, MAX_ANNOUNCE_LENGTH,
   MAX_MONTH_DEVIATION, MONTHS_IN_YEAR,
   DAYS_IN_MONTH, HOURS_IN_DAY, MINUTES_IN_HOUR,
   SECONDS_IN_MINUTE, MAX_SENTENCE_NUMBER, ExitCode,
-  MockGenerationStatus, FILE_CATEGORIES_PATH,
-  FILE_TITLES_PATH, FILE_SENTENCES_PATH, MAX_ID_LENGTH,
+  FILE_CATEGORIES_PATH, FILE_TITLES_PATH, FILE_SENTENCES_PATH,
   FILE_COMMENTS_PATH, MAX_COMMENTS_NUMBER, PiecesInComment,
   ARTICLE_PICTURES
 } = require(`../../constants`);
 const {getRandomInt, shuffle} = require(`../../utils`);
+
+const logger = getLogger({name: `api`});
 
 const readContent = async (filePath) => {
   try {
@@ -61,13 +65,12 @@ const generateRandomDate = () => {
 const generateComments = (count, comments) => {
   return Array(count).fill({}).map(() => {
     return {
-      id: nanoid(MAX_ID_LENGTH),
       text: shuffle(comments).slice(0, getRandomInt(PiecesInComment.min, PiecesInComment.max)).join(` `),
     };
   });
 };
 
-const generateMocks = (count, sentences, titles, categories, comments) => {
+const generateArticles = (count, sentences, titles, categories, comments) => {
   if (count > MAX_ELEMENT_COUNT) {
     console.error(chalk.red(MAX_ELEMENT_COUNT_MESSAGE));
 
@@ -90,7 +93,6 @@ const generateMocks = (count, sentences, titles, categories, comments) => {
     }
 
     return {
-      id: nanoid(MAX_ID_LENGTH),
       comments: generateComments(getRandomInt(1, MAX_COMMENTS_NUMBER), comments),
       title: titles[getRandomInt(0, titles.length - 1)],
       announce: shuffle(titles).slice(0, getRandomInt(1, MAX_ANNOUNCE_LENGTH)).join(` `),
@@ -99,31 +101,45 @@ const generateMocks = (count, sentences, titles, categories, comments) => {
       }).join(` `),
       pictures,
       fullSizePictures,
-      createdDate: generateRandomDate(),
       category: shuffle(categories).slice(0, getRandomInt(0, categories.length - 1)),
     };
   });
 };
 
 module.exports = {
-  name: `--generate`,
+  name: `--filldb`,
   async run(args) {
+    try {
+      logger.info(`Trying to connect to database...`);
+      await sequelize.authenticate();
+    } catch (err) {
+      logger.error(`An error occured: ${err.message}`);
+      process.exit(ExitCode.error);
+    }
+    logger.info(`Connection to database established`);
+
+    const {Category, Article} = defineModels(sequelize);
+
+    await sequelize.sync({force: true}).catch((err) => console.log(err));
+
     const sentences = await readContent(FILE_SENTENCES_PATH);
     const categories = await readContent(FILE_CATEGORIES_PATH);
     const titles = await readContent(FILE_TITLES_PATH);
     const comments = await readContent(FILE_COMMENTS_PATH);
 
+    const categoryModels = await Category.bulkCreate(
+      categories.map((item) => ({name: item}))
+    );
+
     const [count] = args;
     const noteCount = Number.parseInt(count, 10) || DEFAULT_COUNT;
-    const data = JSON.stringify(generateMocks(noteCount, sentences, titles, categories, comments));
+    const articles = generateArticles(noteCount, sentences, titles, categoryModels, comments);
+    const articlePromises = articles.map(async (article) => {
+      const articleModel = await Article.create(article, {include: [Aliase.COMMENTS]});
 
-    try {
-      await fs.writeFile(FILE_NAME, data);
-      console.info(chalk.green(MockGenerationStatus.success));
-      process.exit(ExitCode.success);
-    } catch (err) {
-      console.error(chalk.red(MockGenerationStatus.error));
-      process.exit(ExitCode.error);
-    }
+      await articleModel.addCategories(article.category);
+    });
+
+    await Promise.all(articlePromises).catch((err) => console.log(err));
   }
 };

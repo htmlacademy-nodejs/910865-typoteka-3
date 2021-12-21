@@ -17,11 +17,11 @@ const define = (sequelize) => Article.init({
   },
   fullText: {
     // eslint-disable-next-line new-cap
-    type: DataTypes.STRING(1000),
+    type: DataTypes.TEXT,
     allowNull: false,
   },
-  pictures: DataTypes.STRING,
-  fullSizePictures: DataTypes.STRING,
+  pictures: DataTypes.ARRAY(DataTypes.STRING),
+  fullSizePictures: DataTypes.ARRAY(DataTypes.STRING),
 }, {
   sequelize,
   modelName: ModelName.ARTICLE,
