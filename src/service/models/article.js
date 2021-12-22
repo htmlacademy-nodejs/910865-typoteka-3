@@ -20,7 +20,9 @@ const define = (sequelize) => Article.init({
     type: DataTypes.TEXT,
     allowNull: false,
   },
+  // eslint-disable-next-line new-cap
   pictures: DataTypes.ARRAY(DataTypes.STRING),
+  // eslint-disable-next-line new-cap
   fullSizePictures: DataTypes.ARRAY(DataTypes.STRING),
 }, {
   sequelize,

@@ -10,13 +10,18 @@ const {getLogger} = require(`../lib/logger`);
 const {
   DEFAULT_COUNT, MAX_ELEMENT_COUNT,
   MAX_ELEMENT_COUNT_MESSAGE, MAX_ANNOUNCE_LENGTH,
-  MAX_MONTH_DEVIATION, MONTHS_IN_YEAR,
-  DAYS_IN_MONTH, HOURS_IN_DAY, MINUTES_IN_HOUR,
-  SECONDS_IN_MINUTE, MAX_SENTENCE_NUMBER, ExitCode,
+  MAX_SENTENCE_NUMBER, ExitCode,
   FILE_CATEGORIES_PATH, FILE_TITLES_PATH, FILE_SENTENCES_PATH,
   FILE_COMMENTS_PATH, MAX_COMMENTS_NUMBER, PiecesInComment,
   ARTICLE_PICTURES
 } = require(`../../constants`);
+/*
+const {
+  MAX_MONTH_DEVIATION, MONTHS_IN_YEAR,
+  DAYS_IN_MONTH, HOURS_IN_DAY, MINUTES_IN_HOUR,
+  SECONDS_IN_MINUTE
+} = require(`../../constants`);
+*/
 const {getRandomInt, shuffle} = require(`../../utils`);
 
 const logger = getLogger({name: `api`});
@@ -33,6 +38,7 @@ const readContent = async (filePath) => {
   }
 };
 
+/*
 const generateRandomDate = () => {
   const getRandomMonth = () => {
     const currentMonth = new Date().getMonth();
@@ -61,6 +67,7 @@ const generateRandomDate = () => {
 
   return (`${currentYear}-${getEditedDateElement(date.getMonth() + 1)}-${getEditedDateElement(date.getDate())} ${getEditedDateElement(date.getHours())}:${getEditedDateElement(date.getMinutes())}:${getEditedDateElement(date.getSeconds())}`);
 };
+*/
 
 const generateComments = (count, comments) => {
   return Array(count).fill({}).map(() => {
@@ -128,7 +135,7 @@ module.exports = {
     const comments = await readContent(FILE_COMMENTS_PATH);
 
     const categoryModels = await Category.bulkCreate(
-      categories.map((item) => ({name: item}))
+        categories.map((item) => ({name: item}))
     );
 
     const [count] = args;

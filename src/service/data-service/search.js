@@ -1,22 +1,28 @@
 'use strict';
 
+const {Op} = require(`sequelize`);
+
+const Aliase = require(`../models/aliase`);
+
 class SearchService {
-  constructor(articles) {
-    this._articles = articles;
+  constructor(sequelize) {
+    this._Article = sequelize.models.Article;
   }
 
-  findMatching(query) {
-    const getKeysFromString = (str) => {
-      const words = str.replace(/[.,?!]/g, ``).split(` `);
-
-      return words.map((word) => word.toLowerCase());
-    };
-
-    return this._articles.filter((article) => {
-      const formattedWords = getKeysFromString(query);
-
-      return formattedWords.some((formattedWord) => article.title.toLowerCase().includes(formattedWord));
+  async findMatching(query) {
+    const articles = await this._Article.findAll({
+      where: {
+        title: {
+          [Op.substring]: query
+        }
+      },
+      include: [Aliase.CATEGORIES],
+      order: [
+        [`createdAt`, `DESC`]
+      ]
     });
+
+    return articles.map((article) => article.get());
   }
 }
 
