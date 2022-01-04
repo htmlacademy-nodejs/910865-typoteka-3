@@ -27,17 +27,6 @@ class ArticleService {
 
   async findAll(needComments = {}) {
     const include = [Aliase.CATEGORIES];
-    /*
-    const include = [{
-      model: this._Category,
-      attributes: [`name`],
-      as: Aliase.CATEGORIES,
-      through: {
-        attributes: [],
-      },
-    },
-    ];
-    */
 
     if (needComments) {
       include.push({
@@ -58,15 +47,6 @@ class ArticleService {
   }
 
   findOne(id, needComments = {}) {
-    // const include = [{
-    //   model: this._Category,
-    //   //attributes: [`name`, ],
-    //   as: Aliase.CATEGORIES,
-    //   //through: {
-    //   //  attributes: [],
-    //   //},
-    // },
-    // ];
     const include = [Aliase.CATEGORIES];
 
     if (needComments) {
@@ -80,13 +60,8 @@ class ArticleService {
   }
 
   async update(id, articleData) {
-    console.log(articleData);
-    const newComments = articleData.comments;
-    const newCategories = articleData.categories;
-
     const [affectedRows] = await this._Article.update(articleData, {
       where: {id},
-      include: [Aliase.COMMENTS, Aliase.CATEGORIES]
     });
 
     return !!affectedRows;
