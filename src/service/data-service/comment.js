@@ -17,14 +17,15 @@ class CommentService {
   async create(articleId, text) {
     return this._Comment.create({
       articleId,
-      ...text
+      text
     });
   }
 
   findAll(articleId) {
     return this._Comment.findAll({
       where: {articleId},
-      raw: true
+      raw: true,
+      attributes: [`id`, `text`, `createdAt`, `updatedAt`]
     });
   }
 }

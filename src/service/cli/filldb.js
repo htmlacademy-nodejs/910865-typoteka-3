@@ -15,13 +15,6 @@ const {
   FILE_COMMENTS_PATH, MAX_COMMENTS_NUMBER, PiecesInComment,
   ARTICLE_PICTURES
 } = require(`../../constants`);
-/*
-const {
-  MAX_MONTH_DEVIATION, MONTHS_IN_YEAR,
-  DAYS_IN_MONTH, HOURS_IN_DAY, MINUTES_IN_HOUR,
-  SECONDS_IN_MINUTE
-} = require(`../../constants`);
-*/
 const {getRandomInt, shuffle} = require(`../../utils`);
 
 const logger = getLogger({name: `api`});
@@ -37,37 +30,6 @@ const readContent = async (filePath) => {
     return [];
   }
 };
-
-/*
-const generateRandomDate = () => {
-  const getRandomMonth = () => {
-    const currentMonth = new Date().getMonth();
-    const possibleMonths = Array(MAX_MONTH_DEVIATION).fill(0).map((it, index) => {
-      const possibleMonthIndex = currentMonth - index;
-
-      it = possibleMonthIndex < 0 ? possibleMonthIndex + MONTHS_IN_YEAR : possibleMonthIndex;
-
-      return it;
-    });
-
-    return possibleMonths[getRandomInt(0, possibleMonths.length - 1)];
-  };
-
-  const getEditedDateElement = (dateElement) => {
-    return dateElement < 10 ? `0${dateElement}` : dateElement;
-  };
-
-  const currentYear = new Date().getFullYear();
-  const randomMonth = getRandomMonth();
-  const randomDate = getRandomInt(1, DAYS_IN_MONTH);
-  const randomHour = getRandomInt(0, HOURS_IN_DAY);
-  const randomMinute = getRandomInt(0, MINUTES_IN_HOUR);
-  const randomSecond = getRandomInt(0, SECONDS_IN_MINUTE);
-  const date = new Date(currentYear, randomMonth, randomDate, randomHour, randomMinute, randomSecond);
-
-  return (`${currentYear}-${getEditedDateElement(date.getMonth() + 1)}-${getEditedDateElement(date.getDate())} ${getEditedDateElement(date.getHours())}:${getEditedDateElement(date.getMinutes())}:${getEditedDateElement(date.getSeconds())}`);
-};
-*/
 
 const generateComments = (count, comments) => {
   return Array(count).fill({}).map(() => {

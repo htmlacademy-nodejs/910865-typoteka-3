@@ -7,6 +7,8 @@ const Aliase = require(`../models/aliase`);
 class SearchService {
   constructor(sequelize) {
     this._Article = sequelize.models.Article;
+    this._Category = sequelize.models.Category;
+    this._Comment = sequelize.models.Comment;
   }
 
   async findMatching(query) {
@@ -16,7 +18,11 @@ class SearchService {
           [Op.substring]: query
         }
       },
-      include: [Aliase.CATEGORIES],
+      include: [Aliase.CATEGORIES, {
+        model: this._Comment,
+        attributes: [`id`, `text`, `createdAt`, `updatedAt`],
+        as: Aliase.COMMENTS,
+      }],
       order: [
         [`createdAt`, `DESC`]
       ]

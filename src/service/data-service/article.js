@@ -10,11 +10,11 @@ class ArticleService {
   }
 
   async create(articleData) {
-    const article = await this._Article.create(articleData);
+    const article = await this._Article.create(articleData, {include: Aliase.COMMENTS});
 
-    await article.addCategories(articleData.category);
+    await article.addCategories(articleData.categories);
 
-    return article.get();
+    return article;
   }
 
   async drop(id) {
@@ -25,30 +25,68 @@ class ArticleService {
     return !!deletedRows;
   }
 
-  async findAll(needComments) {
+  async findAll(needComments = {}) {
     const include = [Aliase.CATEGORIES];
+    /*
+    const include = [{
+      model: this._Category,
+      attributes: [`name`],
+      as: Aliase.CATEGORIES,
+      through: {
+        attributes: [],
+      },
+    },
+    ];
+    */
 
     if (needComments) {
-      include.push(Aliase.COMMENTS);
+      include.push({
+        model: this._Comment,
+        attributes: [`id`, `text`, `createdAt`, `updatedAt`],
+        as: Aliase.COMMENTS,
+      });
     }
 
     const articles = await this._Article.findAll({
       include,
       order: [
         [`createdAt`, `DESC`]
-      ]
+      ],
     });
 
-    return articles.map((article) => article.get());
+    return [articles.map((article) => article.get())];
   }
 
-  findOne(id) {
-    return this._Article.findByPk(id, {include: [Aliase.CATEGORIES]});
+  findOne(id, needComments = {}) {
+    // const include = [{
+    //   model: this._Category,
+    //   //attributes: [`name`, ],
+    //   as: Aliase.CATEGORIES,
+    //   //through: {
+    //   //  attributes: [],
+    //   //},
+    // },
+    // ];
+    const include = [Aliase.CATEGORIES];
+
+    if (needComments) {
+      include.push({
+        model: this._Comment,
+        attributes: [`id`, `text`, `createdAt`, `updatedAt`],
+        as: Aliase.COMMENTS,
+      });
+    }
+    return this._Article.findByPk(id, {include});
   }
 
-  async update(id, article) {
-    const [affectedRows] = this._Article.update(article, {
-      where: {id}
+  async update(id, articleData) {
+    console.log(articleData);
+    const newComments = articleData.comments;
+    const newCategories = articleData.categories;
+
+    const [affectedRows] = await this._Article.update(articleData, {
+      where: {id},
+      include: [Aliase.COMMENTS, Aliase.CATEGORIES]
     });
 
     return !!affectedRows;
