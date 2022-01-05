@@ -14,7 +14,7 @@ articlesRouter.get(`/category/:id`, async (req, res) => {
   const activeCategoryTab = categories.find((it) => it.id === parseInt(selectedCategoryId, 10));
 
   if (activeCategoryTab === undefined) {
-    return res.render(`errors/404`)
+    return res.render(`errors/404`);
   }
 
   return res.render(`articles/articles-by-category`, {
