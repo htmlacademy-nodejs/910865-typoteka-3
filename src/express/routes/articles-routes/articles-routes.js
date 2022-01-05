@@ -8,7 +8,17 @@ const upload = require(`../../middlewares/upload`);
 const articlesRouter = new Router();
 const api = getAPI();
 
-articlesRouter.get(`/category/:id`, (req, res) => res.render(`articles/articles-by-category`, {wrapper: {class: `wrapper`}}));
+articlesRouter.get(`/category/:id`, async (req, res) => {
+  const categories = await api.getCategories(true);
+  const selectedCategoryId = req.params.id;
+  const activeCategoryTab = categories.find((it) => it.id === parseInt(selectedCategoryId, 10)).name;
+
+  res.render(`articles/articles-by-category`, {
+    wrapper: {class: `wrapper`},
+    categories,
+    activeCategoryTab
+  });
+});
 articlesRouter.get(`/add`, (req, res) => res.render(`articles/post`, {wrapper: {class: `wrapper`}}));
 articlesRouter.post(`/add`, upload.single(`upload`), (req, res, next) => {
   if (req.file === undefined) {
@@ -34,39 +44,33 @@ articlesRouter.post(`/add`, upload.single(`upload`), (req, res, next) => {
     res.redirect(`back`);
   }
 });
-articlesRouter.get(`/edit/:id`, async (req, res, next) => {
-  const articles = await api.getArticles();
-  let ids = [];
+articlesRouter.get(`/edit/:id`, async (req, res) => {
+  const {id} = req.params;
+  const article = await api.getArticle(id, {comments: true});
 
-  articles.forEach((article) => ids.push(article.id));
-
-  if (!ids.includes(req.params.id)) {
+  if (!article) {
     return res.render(`errors/404`);
   }
 
-  return next();
-}, async (req, res) => {
-  const {id} = req.params;
-  const article = await api.getArticle(id);
-
-  res.render(`./articles/post-detail`, {wrapper: {class: `wrapper`}, article});
+  return res.render(`articles/post`, {wrapper: {class: `wrapper`}, article});
 });
-articlesRouter.get(`/:id`, async (req, res, next) => {
-  const articles = await api.getArticles();
-  let ids = [];
+articlesRouter.get(`/:id`, async (req, res) => {
+  const {id} = req.params;
+  const article = await api.getArticle(id, {comments: true});
+  const categoriesList = await api.getCategories(true);
+  const categories = [];
 
-  articles.forEach((article) => ids.push(article.id));
+  article.categories.forEach((category) => categoriesList.forEach((it) => {
+    if (it.name === category.name) {
+      categories.push(it);
+    }
+  }));
 
-  if (!ids.includes(req.params.id)) {
+  if (!article) {
     return res.render(`errors/404`);
   }
 
-  return next();
-}, async (req, res) => {
-  const {id} = req.params;
-  const article = await api.getArticle(id);
-
-  res.render(`articles/post-detail`, {wrapper: {class: `wrapper`}, article});
+  return res.render(`articles/post-detail`, {wrapper: {class: `wrapper`}, article, categories});
 });
 
 module.exports = articlesRouter;

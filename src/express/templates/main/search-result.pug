@@ -12,6 +12,6 @@ block content
             button.search__button.button.button--transparent(type='submit') Найти
           each article in results
             .search__result
-              +fullDate(`search__date`, article.createdDate)
+              +fullDate(`search__date`, article.createdAt)
               a.search__link
                 | #{article.title}

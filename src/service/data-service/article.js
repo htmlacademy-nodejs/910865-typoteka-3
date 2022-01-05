@@ -25,7 +25,7 @@ class ArticleService {
     return !!deletedRows;
   }
 
-  async findAll(needComments = {}) {
+  async findAll(needComments = ``) {
     const include = [Aliase.CATEGORIES];
 
     if (needComments) {
@@ -43,10 +43,10 @@ class ArticleService {
       ],
     });
 
-    return [articles.map((article) => article.get())];
+    return articles.map((article) => article.get());
   }
 
-  findOne(id, needComments = {}) {
+  findOne(id, needComments) {
     const include = [Aliase.CATEGORIES];
 
     if (needComments) {
@@ -56,6 +56,7 @@ class ArticleService {
         as: Aliase.COMMENTS,
       });
     }
+
     return this._Article.findByPk(id, {include});
   }
 

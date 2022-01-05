@@ -89,7 +89,7 @@ module.exports = {
 
     const {Category, Article} = defineModels(sequelize);
 
-    await sequelize.sync({force: true}).catch((err) => console.log(err));
+    await sequelize.sync({force: true});
 
     const sentences = await readContent(FILE_SENTENCES_PATH);
     const categories = await readContent(FILE_CATEGORIES_PATH);
@@ -109,6 +109,6 @@ module.exports = {
       await articleModel.addCategories(article.category);
     });
 
-    await Promise.all(articlePromises).catch((err) => console.log(err));
+    await Promise.all(articlePromises);
   }
 };

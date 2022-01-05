@@ -8,9 +8,12 @@ const mainRouter = new Router();
 const api = getAPI();
 
 mainRouter.get(`/`, async (req, res) => {
-  const articles = await api.getArticles();
+  const [articles, categories] = await Promise.all([
+    api.getArticles({comments: true}),
+    api.getCategories(true)
+  ]);
 
-  res.render(`main/main`, {wrapper: {class: `wrapper`}, articles});
+  res.render(`main/main`, {wrapper: {class: `wrapper`}, articles, categories});
 });
 mainRouter.get(`/register`, (req, res) => res.render(`main/sign-up`, {wrapper: {class: `wrapper`}}));
 mainRouter.get(`/login`, (req, res) => res.render(`main/login`, {wrapper: {class: `wrapper`}}));

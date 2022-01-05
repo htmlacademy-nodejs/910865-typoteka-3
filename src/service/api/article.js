@@ -20,7 +20,7 @@ module.exports = (app, articleService, commentService) => {
       .json(articles);
   });
 
-  articleRoutes.get(`/:articleId`, async (req, res) => {
+  articleRoutes.get(`/:articleId`, articleExist(articleService), async (req, res) => {
     const {articleId} = req.params;
     const {comments} = req.query;
     const article = await articleService.findOne(articleId, comments);
