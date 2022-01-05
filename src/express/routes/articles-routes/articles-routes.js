@@ -11,12 +11,16 @@ const api = getAPI();
 articlesRouter.get(`/category/:id`, async (req, res) => {
   const categories = await api.getCategories(true);
   const selectedCategoryId = req.params.id;
-  const activeCategoryTab = categories.find((it) => it.id === parseInt(selectedCategoryId, 10)).name;
+  const activeCategoryTab = categories.find((it) => it.id === parseInt(selectedCategoryId, 10));
 
-  res.render(`articles/articles-by-category`, {
+  if (activeCategoryTab === undefined) {
+    return res.render(`errors/404`)
+  }
+
+  return res.render(`articles/articles-by-category`, {
     wrapper: {class: `wrapper`},
     categories,
-    activeCategoryTab
+    activeCategoryTab: activeCategoryTab.name
   });
 });
 articlesRouter.get(`/add`, (req, res) => res.render(`articles/post`, {wrapper: {class: `wrapper`}}));
@@ -46,7 +50,7 @@ articlesRouter.post(`/add`, upload.single(`upload`), (req, res, next) => {
 });
 articlesRouter.get(`/edit/:id`, async (req, res) => {
   const {id} = req.params;
-  const article = await api.getArticle(id, {comments: true});
+  const article = await api.getArticle(id, {comments: true}).catch((err) => console.log(err));
 
   if (!article) {
     return res.render(`errors/404`);
@@ -56,19 +60,19 @@ articlesRouter.get(`/edit/:id`, async (req, res) => {
 });
 articlesRouter.get(`/:id`, async (req, res) => {
   const {id} = req.params;
-  const article = await api.getArticle(id, {comments: true});
+  const article = await api.getArticle(id, {comments: true}).catch((err) => console.log(err));
   const categoriesList = await api.getCategories(true);
   const categories = [];
+
+  if (!article) {
+    return res.render(`errors/404`);
+  }
 
   article.categories.forEach((category) => categoriesList.forEach((it) => {
     if (it.name === category.name) {
       categories.push(it);
     }
   }));
-
-  if (!article) {
-    return res.render(`errors/404`);
-  }
 
   return res.render(`articles/post-detail`, {wrapper: {class: `wrapper`}, article, categories});
 });

@@ -3,9 +3,8 @@
 const fs = require(`fs`).promises;
 const chalk = require(`chalk`);
 
-const Aliase = require(`../models/aliase`);
 const sequelize = require(`../lib/sequelize`);
-const defineModels = require(`../models`);
+const initDB = require(`../lib/init-db`);
 const {getLogger} = require(`../lib/logger`);
 const {
   DEFAULT_COUNT, MAX_ELEMENT_COUNT,
@@ -87,28 +86,14 @@ module.exports = {
     }
     logger.info(`Connection to database established`);
 
-    const {Category, Article} = defineModels(sequelize);
-
-    await sequelize.sync({force: true});
-
     const sentences = await readContent(FILE_SENTENCES_PATH);
     const categories = await readContent(FILE_CATEGORIES_PATH);
     const titles = await readContent(FILE_TITLES_PATH);
     const comments = await readContent(FILE_COMMENTS_PATH);
-
-    const categoryModels = await Category.bulkCreate(
-        categories.map((item) => ({name: item}))
-    );
-
     const [count] = args;
     const noteCount = Number.parseInt(count, 10) || DEFAULT_COUNT;
-    const articles = generateArticles(noteCount, sentences, titles, categoryModels, comments);
-    const articlePromises = articles.map(async (article) => {
-      const articleModel = await Article.create(article, {include: [Aliase.COMMENTS]});
+    const articles = generateArticles(noteCount, sentences, titles, categories, comments);
 
-      await articleModel.addCategories(article.category);
-    });
-
-    await Promise.all(articlePromises);
+    return initDB(sequelize, {categories, articles});
   }
 };
