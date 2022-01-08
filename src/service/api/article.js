@@ -78,10 +78,18 @@ module.exports = (app, articleService, commentService) => {
   });
 
   articleRoutes.delete(`/:articleId/comments/:commentId`, articleExist(articleService), async (req, res) => {
-    const {commentId} = req.params;
+    const {commentId, articleId} = req.params;
+    const commentsById = await commentService.findAll(articleId);
+    const commentSearchMatches = commentsById.filter((it) => it.id === parseInt(commentId, 10));
+
+    if (commentSearchMatches.length === 0) {
+      return res.status(HttpCode.NOT_FOUND)
+        .send(NOT_FOUND_ERROR_MESSAGE);
+    }
+
     const deletedComment = await commentService.drop(commentId);
 
-    res.status(HttpCode.OK)
+    return res.status(HttpCode.OK)
       .json(deletedComment);
   });
 

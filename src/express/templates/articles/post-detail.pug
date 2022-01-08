@@ -12,10 +12,10 @@ block content
             +fullDate(`post__date`, article.createdAt)
             h2.post__title.title.title--main #{article.title}
             +categoryBlock(categories, true)
-          if (article.fullSizePictures !== undefined)
-            if (article.fullSizePictures.length > 0)
+          if (article.picture === `sea`)
+            if (article.picture.length !== 0)
               .post__picture
-                img(src=`/img/${article.fullSizePictures[0]}` alt='пейзаж море, скалы, пляж')
+                img(src=`/img/${article.picture}-fullsize@1x.jpg` srcset=`/img/${article.picture}-fullsize@1x.jpg 1x, /img/${article.picture}-fullsize@2x.jpg 2x` alt=`${article.picture}`)
           .post__text
             h3 Бирюзовое доверие
             p
@@ -31,7 +31,7 @@ block content
                 .comments__text
                   .comments__head
                     p Евгений Петров •
-                    time.comments__date(datetime='2019-03-21T20:33') 21.03.2019, 20:33
+                    +fullDate(`comments__date`, comment.updatedAt)
                   p.comments__message #{comment.text}
           .comments__footer.comments__footer--user
             form(action='#' method='POST')

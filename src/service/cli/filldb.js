@@ -38,6 +38,14 @@ const generateComments = (count, comments) => {
   });
 };
 
+const getPictureName = () => {
+  if (Math.random() < 0.5) {
+    return ARTICLE_PICTURES[getRandomInt(0, ARTICLE_PICTURES.length - 1)];
+  }
+
+  return ``;
+};
+
 const generateArticles = (count, sentences, titles, categories, comments) => {
   if (count > MAX_ELEMENT_COUNT) {
     console.error(chalk.red(MAX_ELEMENT_COUNT_MESSAGE));
@@ -46,20 +54,6 @@ const generateArticles = (count, sentences, titles, categories, comments) => {
   }
 
   return Array(count).fill({}).map(() => {
-    const randomImageIndex = getRandomInt(0, ARTICLE_PICTURES.length - 1);
-    const randomPictureName = ARTICLE_PICTURES[randomImageIndex];
-    const hasPictures = Math.random() < 0.5;
-    let pictures = [];
-    let fullSizePictures = [];
-
-    if (hasPictures) {
-      pictures = [`${randomPictureName}@1x.jpg`, `${randomPictureName}@2x.jpg`];
-
-      if (randomPictureName === `sea`) {
-        fullSizePictures = [`sea-fullsize@1x.jpg`, `sea-fullsize@2x.jpg`];
-      }
-    }
-
     return {
       comments: generateComments(getRandomInt(1, MAX_COMMENTS_NUMBER), comments),
       title: titles[getRandomInt(0, titles.length - 1)],
@@ -67,8 +61,7 @@ const generateArticles = (count, sentences, titles, categories, comments) => {
       fullText: Array(MAX_SENTENCE_NUMBER).fill(``).map(() => {
         return sentences[getRandomInt(0, sentences.length - 1)];
       }).join(` `),
-      pictures,
-      fullSizePictures,
+      picture: getPictureName(),
       category: shuffle(categories).slice(0, getRandomInt(0, categories.length - 1)),
     };
   });

@@ -22,7 +22,7 @@ const NOT_FOUND_ERROR_MESSAGE = `Not found`;
 
 const BAD_REQUEST_MESSAGE = `Bad request`;
 
-const ARTICLE_KEYS = [`title`, `announce`, `fullText`, `categories`, `pictures`, `fullSizePictures`, `comments`];
+const ARTICLE_KEYS = [`title`, `announce`, `fullText`, `categories`, `picture`, `comments`];
 
 const ARTICLE_PICTURES = [`forest`, `sea`, `skyscraper`];
 
