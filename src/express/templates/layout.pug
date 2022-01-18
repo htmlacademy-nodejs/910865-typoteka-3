@@ -14,6 +14,16 @@ html(lang='ru')
     mixin fullDate(className, date)
       time(class=className datetime=`${new Date(date).getFullYear()}-${new Date(date).getMonth() < 9 ? `0${new Date(date).getMonth() + 1}` : new Date(date).getMonth() + 1}-${new Date(date).getDate() < 10 ? `0${new Date(date).getDate()}` : new Date(date).getDate()}T${new Date(date).getHours() < 10 ? `0${new Date(date).getHours()}` : new Date(date).getHours()}:${new Date(date).getMinutes() < 10 ? `0${new Date(date).getMinutes()}` : new Date(date).getMinutes()}`) #{new Date(date).getDate() < 10 ? `0${new Date(date).getDate()}` : new Date(date).getDate()}.#{new Date(date).getMonth() < 9 ? `0${new Date(date).getMonth() + 1}` : new Date(date).getMonth() + 1}.#{new Date(date).getFullYear()}, #{new Date(date).getHours() < 10 ? `0${new Date(date).getHours()}` : new Date(date).getHours()}:#{new Date(date).getMinutes() < 10 ? `0${new Date(date).getMinutes()}` : new Date(date).getMinutes()}
 
+    mixin categoryBlock(categories, isArticlePage, activeCategoryTab = ``)
+      ul.themes(class=`${isArticlePage ? `post__themes` : ``}`)
+        each category in categories
+          li.themes__item
+            a.themes__item-link(href='#', class=`${category.name === activeCategoryTab ? `themes__item-link--active` : ``}`)
+              | #{category.name}
+              sup #{category.count}
+            if isArticlePage
+              button.themes__remove-btn(type='button') Удалить категорию
+
     div(class=wrapper.class)
       include partials/header
       block content

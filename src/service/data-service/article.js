@@ -1,48 +1,71 @@
 'use strict';
 
-const {nanoid} = require(`nanoid`);
-
-const {MAX_ID_LENGTH} = require(`../../constants`);
+const Aliase = require(`../models/aliase`);
 
 class ArticleService {
-  constructor(articles) {
-    this._articles = articles;
+  constructor(sequelize) {
+    this._Article = sequelize.models.Article;
+    this._Category = sequelize.models.Category;
+    this._Comment = sequelize.models.Comment;
   }
 
-  create(article) {
-    const newArticle = Object
-      .assign({id: nanoid(MAX_ID_LENGTH), comments: []}, article);
+  async create(articleData) {
+    const article = await this._Article.create(articleData, {include: Aliase.COMMENTS});
 
-    this._articles.push(newArticle);
-
-    return newArticle;
-  }
-
-  drop(id) {
-    const article = this._articles.find((item) => item.id === id);
-
-    if (!article) {
-      return null;
-    }
-
-    this._articles = this._articles.filter((item) => item.id !== id);
+    await article.addCategories(articleData.categories);
 
     return article;
   }
 
-  findAll() {
-    return this._articles;
+  async drop(id) {
+    const deletedRows = await this._Article.destroy({
+      where: {id}
+    });
+
+    return !!deletedRows;
   }
 
-  findOne(id) {
-    return this._articles.find((item) => item.id === id);
+  async findAll(needComments = ``) {
+    const include = [Aliase.CATEGORIES];
+
+    if (needComments) {
+      include.push({
+        model: this._Comment,
+        attributes: [`id`, `text`, `createdAt`, `updatedAt`],
+        as: Aliase.COMMENTS,
+      });
+    }
+
+    const articles = await this._Article.findAll({
+      include,
+      order: [
+        [`createdAt`, `DESC`]
+      ],
+    });
+
+    return articles.map((article) => article.get());
   }
 
-  update(id, article) {
-    const oldArticle = this._articles
-      .find((item) => item.id === id);
+  findOne(id, needComments) {
+    const include = [Aliase.CATEGORIES];
 
-    return Object.assign(oldArticle, article);
+    if (needComments) {
+      include.push({
+        model: this._Comment,
+        attributes: [`id`, `text`, `createdAt`, `updatedAt`],
+        as: Aliase.COMMENTS,
+      });
+    }
+
+    return this._Article.findByPk(id, {include});
+  }
+
+  async update(id, articleData) {
+    const [affectedRows] = await this._Article.update(articleData, {
+      where: {id},
+    });
+
+    return !!affectedRows;
   }
 }
 

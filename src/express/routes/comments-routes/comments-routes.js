@@ -13,7 +13,7 @@ commentsRouter.get(`/`, async (req, res) => {
   res.render(`comments/my`, {wrapper: {class: `wrapper, wrapper--nobackground`}, articles});
 });
 commentsRouter.get(`/comments`, async (req, res) => {
-  const articles = await api.getArticles();
+  const articles = await api.getArticles({comments: true});
 
   res.render(`comments/comments`, {wrapper: {class: `wrapper, wrapper--nobackground`}, articles});
 });

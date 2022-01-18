@@ -9,9 +9,9 @@ const searchRoutes = new Router();
 module.exports = (app, searchService) => {
   app.use(`/search`, searchRoutes);
 
-  searchRoutes.get(`/`, (req, res) => {
+  searchRoutes.get(`/`, async (req, res) => {
     const {query = ``} = req.query;
-    const searchResults = searchService.findMatching(query);
+    const searchResults = await searchService.findMatching(query);
 
     if (!query) {
       return res.status(HttpCode.BAD_REQUEST)

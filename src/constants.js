@@ -22,7 +22,7 @@ const NOT_FOUND_ERROR_MESSAGE = `Not found`;
 
 const BAD_REQUEST_MESSAGE = `Bad request`;
 
-const ARTICLE_KEYS = [`title`, `announce`, `fullText`, `createdDate`, `category`, `pictures`];
+const ARTICLE_KEYS = [`title`, `announce`, `fullText`, `categories`, `picture`, `comments`];
 
 const ARTICLE_PICTURES = [`forest`, `sea`, `skyscraper`];
 
@@ -87,6 +87,18 @@ const Env = {
   PRODUCTION: `production`,
 };
 
+const ModelName = {
+  CATEGORY: `Category`,
+  ARTICLE: `Article`,
+  COMMENT: `Comment`,
+};
+
+const TableName = {
+  CATEGORY: `categories`,
+  ARTICLE: `articles`,
+  COMMENT: `comments`,
+};
+
 const PiecesInComment = {
   min: 1,
   max: 3
@@ -127,5 +139,7 @@ module.exports = {
   API_TIMEOUT,
   ARTICLE_PICTURES,
   FILE_EXTENSIONS,
-  UPLOAD_DIR
+  UPLOAD_DIR,
+  ModelName,
+  TableName,
 };
