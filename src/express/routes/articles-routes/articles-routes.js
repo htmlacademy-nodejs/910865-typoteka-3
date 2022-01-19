@@ -4,14 +4,25 @@ const {Router} = require(`express`);
 
 const {getAPI} = require(`../../api`);
 const upload = require(`../../middlewares/upload`);
+const {ARTICLES_PER_PAGE} = require(`../../../constants`);
 
 const articlesRouter = new Router();
 const api = getAPI();
 
 articlesRouter.get(`/category/:id`, async (req, res) => {
-  const categories = await api.getCategories(true);
-  const selectedCategoryId = req.params.id;
-  const activeCategoryTab = categories.find((it) => it.id === parseInt(selectedCategoryId, 10));
+  let {page = 1} = req.query;
+
+  page = +page;
+
+  const selectedCategoryId = parseInt(req.params.id, 10);
+  const limit = ARTICLES_PER_PAGE;
+  const offset = (page - 1) * ARTICLES_PER_PAGE;
+  const [{count, articles}, categories] = await Promise.all([
+    api.getArticles({limit, offset, filterOption: selectedCategoryId}),
+    api.getCategories(true)
+  ]);
+  const totalPages = Math.ceil(count / ARTICLES_PER_PAGE);
+  const activeCategoryTab = categories.find((it) => it.id === selectedCategoryId);
 
   if (activeCategoryTab === undefined) {
     return res.render(`errors/404`);
@@ -19,7 +30,10 @@ articlesRouter.get(`/category/:id`, async (req, res) => {
 
   return res.render(`articles/articles-by-category`, {
     wrapper: {class: `wrapper`},
+    articles,
     categories,
+    page,
+    totalPages,
     activeCategoryTab: activeCategoryTab.name
   });
 });
