@@ -25,6 +25,7 @@ class CategoryService {
           ]
         ],
         group: [Sequelize.col(`Category.id`)],
+        order: [`id`],
         include: [{
           model: this._ArticleCategory,
           as: Aliase.ARTICLE_CATEGORIES,

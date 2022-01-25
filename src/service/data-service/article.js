@@ -25,7 +25,7 @@ class ArticleService {
     return !!deletedRows;
   }
 
-  async findAll(needComments = ``) {
+  async findAll(needComments) {
     const include = [Aliase.CATEGORIES];
 
     if (needComments) {
@@ -66,6 +66,32 @@ class ArticleService {
     });
 
     return !!affectedRows;
+  }
+
+  async findPage({limit, offset, filterOption}) {
+    const include = [Aliase.COMMENTS];
+
+    if (filterOption) {
+      include.push({
+        model: this._Category,
+        as: Aliase.CATEGORIES,
+        where: {id: filterOption}
+      });
+    } else {
+      include.push(Aliase.CATEGORIES);
+    }
+
+    const {count, rows} = await this._Article.findAndCountAll({
+      limit,
+      offset,
+      include,
+      order: [
+        [`createdAt`, `DESC`]
+      ],
+      distinct: true
+    });
+
+    return {count, articles: rows};
   }
 }
 

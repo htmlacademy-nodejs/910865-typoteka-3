@@ -40,6 +40,8 @@ const API_TIMEOUT = 1000;
 
 const DEFAULT_PORT = 8080;
 
+const ARTICLES_PER_PAGE = 8;
+
 const MAX_ID_LENGTH = 6;
 
 const MAX_COMMENTS_NUMBER = 3;
@@ -142,4 +144,5 @@ module.exports = {
   UPLOAD_DIR,
   ModelName,
   TableName,
+  ARTICLES_PER_PAGE
 };
