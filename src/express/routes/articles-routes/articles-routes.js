@@ -10,10 +10,7 @@ const articlesRouter = new Router();
 const api = getAPI();
 
 articlesRouter.get(`/category/:id`, async (req, res) => {
-  let {page = 1} = req.query;
-
-  page = +page;
-
+  const page = +req.query.page || 1;
   const selectedCategoryId = parseInt(req.params.id, 10);
   const limit = ARTICLES_PER_PAGE;
   const offset = (page - 1) * ARTICLES_PER_PAGE;

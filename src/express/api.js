@@ -18,8 +18,8 @@ class API {
     return response.data;
   }
 
-  getArticles({comments, offset, limit, filterOption} = {}) {
-    return this._load(`/articles`, {params: {comments, offset, limit, filterOption}});
+  getArticles(params = {}) {
+    return this._load(`/articles`, {params});
   }
 
   getArticle(id, {comments}) {
