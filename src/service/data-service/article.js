@@ -10,11 +10,11 @@ class ArticleService {
   }
 
   async create(articleData) {
-    const article = await this._Article.create(articleData, {include: Aliase.COMMENTS});
+    const article = await this._Article.create(articleData);
 
     await article.addCategories(articleData.categories);
 
-    return article;
+    return article.get();
   }
 
   async drop(id) {

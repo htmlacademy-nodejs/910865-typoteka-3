@@ -16,7 +16,15 @@ const shuffle = (someArray) => {
   return someArray;
 };
 
+const prepareErrors = (errors) => {
+  return errors.response.data.split(`\n`);
+};
+
+const ensureArray = (value) => Array.isArray(value) ? value : [value];
+
 module.exports = {
   getRandomInt,
   shuffle,
+  prepareErrors,
+  ensureArray
 };

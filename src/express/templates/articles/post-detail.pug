@@ -12,14 +12,38 @@ block content
             +fullDate(`post__date`, article.createdAt)
             h2.post__title.title.title--main #{article.title}
             +categoryBlock(categories, true)
-          if (article.picture === `sea`)
-            if (article.picture.length !== 0)
-              .post__picture
-                img(src=`/img/${article.picture}-fullsize@1x.jpg` srcset=`/img/${article.picture}-fullsize@1x.jpg 1x, /img/${article.picture}-fullsize@2x.jpg 2x` alt=`${article.picture}`)
+          if (article.picture === `sea@1x.jpg`)
+            .post__picture
+              -
+                const pictureName = article.picture.split(`@`)[0];
+
+              img(src=`/img/${pictureName}-fullsize@1x.jpg` srcset=`/img/${pictureName}-fullsize@1x.jpg 1x, /img/${pictureName}-fullsize@2x.jpg 2x` alt=`${pictureName}`)
+          if (article.picture === `skyscraper@1x.jpg`)
+            .post__picture
+              -
+                const pictureName = article.picture.split(`@`)[0];
+
+              img(src=`/img/${pictureName}@1x.jpg` srcset=`/img/${pictureName}@1x.jpg 1x, /img/${pictureName}@2x.jpg 2x` alt=`${pictureName}`)
+          if (article.picture === `forest@1x.jpg`)
+            .post__picture
+              -
+                const pictureName = article.picture.split(`@`)[0];
+
+              img(src=`/img/${pictureName}@1x.jpg` srcset=`/img/${pictureName}@1x.jpg 1x, /img/${pictureName}@2x.jpg 2x` alt=`${pictureName}`)
+          if (article.picture)
+            .post__picture
+              -
+                //const pictureName = article.picture.split(`@`)[0];
+                const pictureName = article.picture;
+                //src/express/upload/img
+                ///Users/ozkhanm/Desktop/academy/910865-typoteka-3/src/express/upload/img
+
+              img(src=`/upload/img/${pictureName}` srcset=`/upload/img/${pictureName} 1x, /upload/img/${pictureName} 2x` alt=`${pictureName}`)
           .post__text
             h3 Бирюзовое доверие
-            p
-              | #{article.fullText}
+            if (article.fullText)
+              p
+                | #{article.fullText}
       .post__wrapper.post__wrapper--comments
         section.post__comments.comments
           h2.comments__title.title.title--middle Комментарии
@@ -34,9 +58,15 @@ block content
                     +fullDate(`comments__date`, comment.updatedAt)
                   p.comments__message #{comment.text}
           .comments__footer.comments__footer--user
-            form(action='#' method='POST')
+            form(action=`/articles/${article.id}/comments` method='POST')
               .comments__avatar.avatar
                 img(src='/img/avatar-2.png' alt='аватар пользователя')
               label
                 textarea(rows='1' name='message' placeholder='Присоединиться к обсуждению')
               button.comments__button.button.button--colored(type='submit') Опубликовать
+              if validationMessages
+                div.form__validation-error
+                  p.form__error-message При отправке формы возникли ошибки:
+                  ul.form__errors
+                    each errorMessage in validationMessages
+                      li.form__error #{errorMessage}
