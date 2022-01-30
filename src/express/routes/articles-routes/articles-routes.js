@@ -84,7 +84,7 @@ articlesRouter.post(`/edit/:id`, upload.single(`upload`), async (req, res) => {
     createdAt: `${body.date} ${new Date(Date.now()).getHours() < 10 ? `0${new Date(Date.now()).getHours()}` : new Date(Date.now()).getHours()}:${new Date(Date.now()).getMinutes() < 10 ? `0${new Date(Date.now()).getMinutes()}` : new Date(Date.now()).getMinutes()}:${new Date(Date.now()).getSeconds() < 10 ? `0${new Date(Date.now()).getSeconds()}` : new Date(Date.now()).getSeconds()}`,
     announce: body.announcement,
     fullText: body[`full-text`],
-    picture: file ? file.filename : ``,
+    picture: file ? file.filename : (body.photo || ``),
     categories: ensureArray(body.category)
   };
 

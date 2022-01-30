@@ -36,6 +36,9 @@ block content
                     label
                       input.visually-hidden(type='file' name='upload')
                       | Обзор
+                  if (article)
+                    if (article.picture)
+                      button.button.button--transparent(type='button' onClick="document.querySelector(`#image-name-field`).value='';") Удалить
                 .new-publication__category-wrapper
                   each category in categories
                     -

@@ -30,15 +30,12 @@ block content
                 const pictureName = article.picture.split(`@`)[0];
 
               img(src=`/img/${pictureName}@1x.jpg` srcset=`/img/${pictureName}@1x.jpg 1x, /img/${pictureName}@2x.jpg 2x` alt=`${pictureName}`)
-          if (article.picture)
+          if ((article.picture !== `sea@1x.jpg`) && (article.picture !== `skyscraper@1x.jpg`) && (article.picture !== `forest@1x.jpg`))
             .post__picture
               -
-                //const pictureName = article.picture.split(`@`)[0];
                 const pictureName = article.picture;
-                //src/express/upload/img
-                ///Users/ozkhanm/Desktop/academy/910865-typoteka-3/src/express/upload/img
 
-              img(src=`/upload/img/${pictureName}` srcset=`/upload/img/${pictureName} 1x, /upload/img/${pictureName} 2x` alt=`${pictureName}`)
+              img(src=`/img/${pictureName}` srcset=`/img/${pictureName} 1x, /img/${pictureName} 2x` alt=`${pictureName}`)
           .post__text
             h3 Бирюзовое доверие
             if (article.fullText)

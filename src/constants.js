@@ -14,6 +14,8 @@ const FILE_NAME = `mocks.json`;
 
 const PUBLIC_DIR = `public`;
 
+const UPLOAD_DIR_NAME = `upload`;
+
 const TEMPLATES_DIR = `templates`;
 
 const MAX_ELEMENT_COUNT_MESSAGE = `No more than 1000 publications`;
@@ -187,5 +189,6 @@ module.exports = {
   MAX_ANNOUNCE_TEXT_LENGTH,
   MAX_TEXT_TEXT_LENGTH,
   MIN_CATEGORIES_NUMBER,
-  HttpMethod
+  HttpMethod,
+  UPLOAD_DIR_NAME
 };
