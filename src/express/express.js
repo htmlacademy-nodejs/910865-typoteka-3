@@ -14,7 +14,11 @@ const app = express();
 app.use(express.urlencoded({extended: true}));
 app.use(
     helmet({
-      contentSecurityPolicy: false,
+      contentSecurityPolicy: {
+        directives: {
+          scriptSrc: ["'self'", "'unsafe-eval'"]
+        }
+      },
     })
 );
 app.use(express.json());
