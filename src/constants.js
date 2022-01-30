@@ -91,12 +91,14 @@ const ModelName = {
   CATEGORY: `Category`,
   ARTICLE: `Article`,
   COMMENT: `Comment`,
+  USER: `User`,
 };
 
 const TableName = {
   CATEGORY: `categories`,
   ARTICLE: `articles`,
   COMMENT: `comments`,
+  USER: `users`,
 };
 
 const PiecesInComment = {
