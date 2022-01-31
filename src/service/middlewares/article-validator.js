@@ -30,7 +30,10 @@ const schema = Joi.object({
       Joi.number().integer().positive().messages({
         'number.base': ErrorArticleMessage.CATEGORIES
       })
-  ).min(MIN_CATEGORIES_NUMBER).required()
+  ).min(MIN_CATEGORIES_NUMBER).required(),
+  userId: Joi.number().integer().positive().required().messages({
+    'number.base': ErrorArticleMessage.USER_ID
+  })
 });
 
 module.exports = (req, res, next) => {
