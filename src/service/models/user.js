@@ -2,7 +2,7 @@
 
 const {Model, DataTypes} = require(`sequelize`);
 
-const {ModelName, TableName} = require("../../constants");
+const {ModelName, TableName} = require(`../../constants`);
 
 class User extends Model {}
 

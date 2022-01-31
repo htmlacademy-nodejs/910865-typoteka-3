@@ -25,7 +25,6 @@ class CommentService {
     return this._Comment.findAll({
       where: {articleId},
       raw: true,
-      attributes: [`id`, `text`, `createdAt`, `updatedAt`]
     });
   }
 }

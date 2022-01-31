@@ -9,6 +9,7 @@ class SearchService {
     this._Article = sequelize.models.Article;
     this._Category = sequelize.models.Category;
     this._Comment = sequelize.models.Comment;
+    this._User = sequelize.models.User;
   }
 
   async findMatching(query) {
@@ -18,11 +19,15 @@ class SearchService {
           [Op.substring]: query
         }
       },
-      include: [Aliase.CATEGORIES, {
-        model: this._Comment,
-        attributes: [`id`, `text`, `createdAt`, `updatedAt`],
-        as: Aliase.COMMENTS,
-      }],
+      include: [Aliase.CATEGORIES,
+        {
+          model: this._User,
+          as: Aliase.USERS,
+          attributes: {
+            exclude: [`passwordHash`]
+          }
+        }
+      ],
       order: [
         [`createdAt`, `DESC`]
       ]

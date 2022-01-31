@@ -16,7 +16,7 @@ app.use(
     helmet({
       contentSecurityPolicy: {
         directives: {
-          scriptSrc: ["'self'", "'unsafe-eval'"]
+          scriptSrc: [`'self'`, `'unsafe-eval'`]
         }
       },
     })
