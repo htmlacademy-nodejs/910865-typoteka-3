@@ -24,6 +24,7 @@ const mockArticles = [
       {"text":"Хочу такую же футболку :-) Плюсую, но слишком много буквы!"},
       {"text":"Мне кажется или я уже читал это где-то?"}
     ],
+    "createdAt": "2022-01-29T14:37:21.725Z",
     "title":"Рок — это протест",
     "announce":"Борьба с прокрастинацией Самый лучший музыкальный альбом этого года Как собрать камни бесконечности",
     "fullText":"Собрать камни бесконечности легко, если вы прирожденный герой. Достичь успеха помогут ежедневные повторения. Этот смартфон — настоящая находка. Большой и яркий экран, мощнейший процессор — всё это в небольшом гаджете. Собрать камни бесконечности легко, если вы прирожденный герой. Программировать не настолько сложно, как об этом говорят. Помните, небольшое количество ежедневных упражнений лучше, чем один раз, но много. Первая большая ёлка была установлена только в 1938 году. Он написал больше 30 хитов. Вы можете достичь всего. Стоит только немного постараться и запастись книгами. Рок-музыка всегда ассоциировалась с протестами. Так ли это на самом деле? Из под его пера вышло 8 платиновых альбомов. Достичь успеха помогут ежедневные повторения. Из под его пера вышло 8 платиновых альбомов. Освоить вёрстку несложно. Возьмите книгу новую книгу и закрепите все упражнения на практике. Первая большая ёлка была установлена только в 1938 году. Этот смартфон — настоящая находка. Большой и яркий экран, мощнейший процессор — всё это в небольшом гаджете. Освоить вёрстку несложно. Возьмите книгу новую книгу и закрепите все упражнения на практике. Первая большая ёлка была установлена только в 1938 году. Игры и программирование разные вещи. Не стоит идти в программисты, если вам нравятся только игры. Бороться с прокрастинацией несложно. Просто действуйте. Маленькими шагами. Он написал больше 30 хитов. Вы можете достичь всего. Стоит только немного постараться и запастись книгами. Помните, небольшое количество ежедневных упражнений лучше, чем один раз, но много. Из под его пера вышло 8 платиновых альбомов. Рок-музыка всегда ассоциировалась с протестами. Так ли это на самом деле? Рок-музыка всегда ассоциировалась с протестами. Так ли это на самом деле? Игры и программирование разные вещи. Не стоит идти в программисты, если вам нравятся только игры. Простые ежедневные упражнения помогут достичь успеха. Как начать действовать? Для начала просто соберитесь. Помните, небольшое количество ежедневных упражнений лучше, чем один раз, но много. Рок-музыка всегда ассоциировалась с протестами. Так ли это на самом деле? Золотое сечение — соотношение двух величин, гармоническая пропорция. Вы можете достичь всего. Стоит только немного постараться и запастись книгами. Программировать не настолько сложно, как об этом говорят. Освоить вёрстку несложно. Возьмите книгу новую книгу и закрепите все упражнения на практике. Простые ежедневные упражнения помогут достичь успеха. Игры и программирование разные вещи. Не стоит идти в программисты, если вам нравятся только игры. Вы можете достичь всего. Стоит только немного постараться и запастись книгами. Достичь успеха помогут ежедневные повторения. Бороться с прокрастинацией несложно. Просто действуйте. Маленькими шагами.",
@@ -35,6 +36,7 @@ const mockArticles = [
       {"text":"Это где ж такие красоты?"},
       {"text":"Плюсую, но слишком много буквы!"},
     ],
+    "createdAt": "2022-01-29T14:37:21.725Z",
     "title":"Учим HTML и CSS",
     "announce":"Собрать камни бесконечности легко, если вы прирожденный герой.",
     "fullText":"Достичь успеха помогут ежедневные повторения. Этот смартфон — настоящая находка. Большой и яркий экран, мощнейший процессор — всё это в небольшом гаджете. Собрать камни бесконечности легко, если вы прирожденный герой. Программировать не настолько сложно, как об этом говорят. Помните, небольшое количество ежедневных упражнений лучше, чем один раз, но много. Первая большая ёлка была установлена только в 1938 году. Он написал больше 30 хитов. Вы можете достичь всего. Стоит только немного постараться и запастись книгами. Рок-музыка всегда ассоциировалась с протестами. Так ли это на самом деле? Из под его пера вышло 8 платиновых альбомов. Достичь успеха помогут ежедневные повторения. Из под его пера вышло 8 платиновых альбомов. Освоить вёрстку несложно. Возьмите книгу новую книгу и закрепите все упражнения на практике. Первая большая ёлка была установлена только в 1938 году. Этот смартфон — настоящая находка. Большой и яркий экран, мощнейший процессор — всё это в небольшом гаджете. Освоить вёрстку несложно. Возьмите книгу новую книгу и закрепите все упражнения на практике. Первая большая ёлка была установлена только в 1938 году. Игры и программирование разные вещи. Не стоит идти в программисты, если вам нравятся только игры. Бороться с прокрастинацией несложно. Просто действуйте. Маленькими шагами. Он написал больше 30 хитов. Вы можете достичь всего. Стоит только немного постараться и запастись книгами. Помните, небольшое количество ежедневных упражнений лучше, чем один раз, но много. Из под его пера вышло 8 платиновых альбомов. Рок-музыка всегда ассоциировалась с протестами. Так ли это на самом деле? Рок-музыка всегда ассоциировалась с протестами. Так ли это на самом деле? Игры и программирование разные вещи. Не стоит идти в программисты, если вам нравятся только игры. Простые ежедневные упражнения помогут достичь успеха. Как начать действовать? Для начала просто соберитесь. Помните, небольшое количество ежедневных упражнений лучше, чем один раз, но много. Рок-музыка всегда ассоциировалась с протестами. Так ли это на самом деле? Золотое сечение — соотношение двух величин, гармоническая пропорция. Вы можете достичь всего. Стоит только немного постараться и запастись книгами. Программировать не настолько сложно, как об этом говорят. Освоить вёрстку несложно. Возьмите книгу новую книгу и закрепите все упражнения на практике. Простые ежедневные упражнения помогут достичь успеха. Игры и программирование разные вещи. Не стоит идти в программисты, если вам нравятся только игры. Вы можете достичь всего. Стоит только немного постараться и запастись книгами. Достичь успеха помогут ежедневные повторения. Бороться с прокрастинацией несложно. Просто действуйте. Маленькими шагами.",
@@ -85,7 +87,7 @@ describe(`API returns 404 with uncorrect id`, () => {
   beforeAll(async () => {
     app = await createAPI();
     response = await request(app)
-      .get(`/articles/A4xuS`);
+      .get(`/articles/1900`);
   });
 
   test(`API returns 404 with uncorrect id`, () => expect(response.statusCode).toBe(HttpCode.NOT_FOUND));
@@ -93,12 +95,12 @@ describe(`API returns 404 with uncorrect id`, () => {
 
 describe(`API creates an article if data is valid`, () => {
   const newArticle = {
-    "title":"test title",
-    "announce":"test announce",
+    "title":"test title test title test title",
+    "announce":"test announce test announce test announce",
     "fullText":"test text",
+    "createdAt": "2022-01-29T14:37:21.725Z",
     "categories":[4],
-    "picture": "",
-    "comments": []
+    "picture": ""
   };
 
   beforeAll(async () => {
@@ -111,11 +113,11 @@ describe(`API creates an article if data is valid`, () => {
   test(`Status code 201`, () => expect(response.statusCode).toBe(HttpCode.CREATED));
   test(`Returns correct data of created article`, () => {
     expect(response.body.id).toEqual(3);
-    expect(response.body.title).toEqual(`test title`);
-    expect(response.body.announce).toEqual(`test announce`);
+    expect(response.body.title).toEqual(`test title test title test title`);
+    expect(response.body.announce).toEqual(`test announce test announce test announce`);
     expect(response.body.fullText).toEqual(`test text`);
+    expect(response.body.createdAt).toEqual(`2022-01-29T14:37:21.725Z`);
     expect(response.body.picture).toEqual(``);
-    expect(response.body.comments).toEqual([]);
   });
   test(`Articles count is changed`, () => {
       request(app)
@@ -126,12 +128,11 @@ describe(`API creates an article if data is valid`, () => {
 
 describe(`API refuses to create an article if data is invalid`, () => {
   const newArticle = {
-    "title":"test title",
-    "announce":"test announce",
+    "title":"test title test title test title test title",
+    "announce":"test announce test announce test announce test announce",
     "fullText":"test text",
-    "category":["category #1","category #2"],
-    "pictures": ``,
-    "comments": []
+    "category":[2,3],
+    "pictures": ""
   };
 
   test(`Without any required property response code is 400`, async () => {
@@ -154,12 +155,12 @@ describe(`API refuses to create an article if data is invalid`, () => {
 
 describe(`API changes existent article`, () => {
   const newArticle = {
-    "title":"test title",
-    "announce":"test announce",
+    "title":"test title test title test title",
+    "announce":"test announce test announce test announce",
     "fullText":"test text",
+    "createdAt": "2022-01-29T14:37:21.725Z",
     "categories":[4],
-    "picture": "",
-    "comments": []
+    "picture": ""
   };
 
   beforeAll(async () => {
@@ -179,16 +180,16 @@ describe(`API changes existent article`, () => {
   );
   test(`API returns status code 404 when trying to change non-existent article`, () => {
     const validArticle = {
-      "title":"test title",
-      "announce":"test announce",
+      "title":"test title test title test title test title test title",
+      "announce":"test announce test announce test announce test announce",
+      "createdAt": "2022-01-29T14:37:21.725Z",
       "fullText":"test text",
-      "categories":["4"],
-      "picture": "",
-      "comments": []
+      "categories":[5],
+      "picture": ""
     };
 
     return request(app)
-      .put(`/articles/err`)
+      .put(`/articles/178`)
       .send(validArticle)
       .expect(HttpCode.NOT_FOUND);
   });
@@ -228,12 +229,12 @@ describe(`API workds correcty if trying to delete non-existent article`, () => {
   beforeAll(async () => {
     app = await createAPI();
     response = await request(app)
-      .delete(`/articles/err`);
+      .delete(`/articles/178`);
   });
 
   test(`API refuses to delete non-existent article`, () => {
     return request(app)
-      .delete(`/articles/err`)
+      .delete(`/articles/178`)
       .expect(HttpCode.NOT_FOUND);
   });
 
@@ -250,7 +251,7 @@ describe(`API workds correctly while trying to post a comment`, () => {
     response = await request(app)
       .post(`/articles/1/comments`)
       .send({
-        text: `test article text`
+        text: `test article text test article text`
       });
   });
 
@@ -266,7 +267,10 @@ describe(`API workds correctly while trying to post a comment`, () => {
 
 test(`API returns 404 while trying to post a comment to an absent article`, () => {
   return request(app)
-    .post(`/articles/err/comments`)
+    .post(`/articles/178/comments`)
+    .send({
+      text: `test article text test article text`
+    })
     .expect(HttpCode.NOT_FOUND);
 });
 
@@ -318,6 +322,6 @@ describe(`API works correctly while getting article's comments`, () => {
 
 test(`API works correctly while getting absent article's id comments`, () => {
   return request(app)
-    .get(`/articles/err/comments`)
+    .get(`/articles/178/comments`)
     .expect(HttpCode.NOT_FOUND);
 });

@@ -14,15 +14,13 @@ const FILE_NAME = `mocks.json`;
 
 const PUBLIC_DIR = `public`;
 
+const UPLOAD_DIR_NAME = `upload`;
+
 const TEMPLATES_DIR = `templates`;
 
 const MAX_ELEMENT_COUNT_MESSAGE = `No more than 1000 publications`;
 
 const NOT_FOUND_ERROR_MESSAGE = `Not found`;
-
-const BAD_REQUEST_MESSAGE = `Bad request`;
-
-const ARTICLE_KEYS = [`title`, `announce`, `fullText`, `categories`, `picture`, `comments`];
 
 const ARTICLE_PICTURES = [`forest`, `sea`, `skyscraper`];
 
@@ -106,6 +104,45 @@ const PiecesInComment = {
   max: 3
 };
 
+const ErrorCommentMessage = {
+  TEXT: `Сообщение содердит меньше 20 символов`,
+  EMPTY: `Сообщение не может быть пустым, напишите что-нибудь!`
+};
+
+const MIN_COMMENT_TEXT_LENGTH = 20;
+
+const ErrorArticleMessage = {
+  TITLE_MIN: `Заголовок содержит меньше 30 символов`,
+  TITLE_MAX: `Заголовок не может содержать более 250 символов`,
+  TITLE_REQUIRED: `Не заполнено поле "Заголовок"`,
+  PICTURE: `Изображение не выбрано или тип изображения не поддерживается`,
+  CATEGORIES: `Не выбрана ни одна категория`,
+  ANNOUNCE_MIN: `Анонс содержит меньше 30 символов`,
+  ANNOUNCE_MAX: `Анонс не может содержать более 250 символов`,
+  ANNOUNCE_REQUIRED: `Не заполнено поле "Анонс публикации"`,
+  TEXT_MAX: `Текст не может содержать более 1000 символов`,
+  DATE: `Не указана дата публикации`
+};
+
+const MIN_TITLE_TEXT_LENGTH = 30;
+
+const MAX_TITLE_TEXT_LENGTH = 250;
+
+const MIN_ANNOUNCE_TEXT_LENGTH = 30;
+
+const MAX_ANNOUNCE_TEXT_LENGTH = 250;
+
+const MAX_TEXT_TEXT_LENGTH = 1000;
+
+const MIN_CATEGORIES_NUMBER = 1;
+
+const HttpMethod = {
+  GET: `GET`,
+  POST: `POST`,
+  PUT: `PUT`,
+  DELETE: `DELETE`,
+};
+
 module.exports = {
   DEFAULT_COUNT,
   DEFAULT_PORT,
@@ -135,8 +172,6 @@ module.exports = {
   FILE_COMMENTS_PATH,
   MAX_COMMENTS_NUMBER,
   PiecesInComment,
-  BAD_REQUEST_MESSAGE,
-  ARTICLE_KEYS,
   Env,
   API_TIMEOUT,
   ARTICLE_PICTURES,
@@ -144,5 +179,16 @@ module.exports = {
   UPLOAD_DIR,
   ModelName,
   TableName,
-  ARTICLES_PER_PAGE
+  ARTICLES_PER_PAGE,
+  ErrorCommentMessage,
+  MIN_COMMENT_TEXT_LENGTH,
+  ErrorArticleMessage,
+  MIN_TITLE_TEXT_LENGTH,
+  MAX_TITLE_TEXT_LENGTH,
+  MIN_ANNOUNCE_TEXT_LENGTH,
+  MAX_ANNOUNCE_TEXT_LENGTH,
+  MAX_TEXT_TEXT_LENGTH,
+  MIN_CATEGORIES_NUMBER,
+  HttpMethod,
+  UPLOAD_DIR_NAME
 };

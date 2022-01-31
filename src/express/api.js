@@ -2,7 +2,7 @@
 
 const axios = require(`axios`);
 
-const {API_TIMEOUT} = require(`../constants`);
+const {API_TIMEOUT, HttpMethod} = require(`../constants`);
 
 class API {
   constructor(baseURL, timeout) {
@@ -18,8 +18,8 @@ class API {
     return response.data;
   }
 
-  getArticles({comments, offset, limit, filterOption} = {}) {
-    return this._load(`/articles`, {params: {comments, offset, limit, filterOption}});
+  getArticles(params = {}) {
+    return this._load(`/articles`, {params});
   }
 
   getArticle(id, {comments}) {
@@ -30,13 +30,27 @@ class API {
     return this._load(`/search`, {params: {query}});
   }
 
-  async getCategories(count) {
+  getCategories(count) {
     return this._load(`/categories`, {params: {count}});
   }
 
-  async createArticle(data) {
+  createArticle(data) {
     return this._load(`/articles`, {
-      method: `POST`,
+      method: HttpMethod.POST,
+      data
+    });
+  }
+
+  updateArticle(id, data) {
+    return this._load(`/articles/${id}`, {
+      method: HttpMethod.PUT,
+      data
+    });
+  }
+
+  createComment(id, data) {
+    return this._load(`/articles/${id}/comments`, {
+      method: HttpMethod.POST,
       data
     });
   }

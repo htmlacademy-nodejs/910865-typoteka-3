@@ -40,7 +40,7 @@ const generateComments = (count, comments) => {
 
 const getPictureName = () => {
   if (Math.random() < 0.5) {
-    return ARTICLE_PICTURES[getRandomInt(0, ARTICLE_PICTURES.length - 1)];
+    return `${ARTICLE_PICTURES[getRandomInt(0, ARTICLE_PICTURES.length - 1)]}@1x.jpg`;
   }
 
   return ``;
