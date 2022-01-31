@@ -143,6 +143,11 @@ const ErrorRegisterMessage = {
   AVATAR: `Изображение не выбрано или тип изображения не поддерживается`
 };
 
+const ErrorAuthMessage = {
+  EMAIL: `Электронный адрес не существует`,
+  PASSWORD: `Неверный пароль`
+}
+
 const MIN_TITLE_TEXT_LENGTH = 30;
 
 const MAX_TITLE_TEXT_LENGTH = 250;
@@ -216,5 +221,6 @@ module.exports = {
   UPLOAD_DIR_NAME,
   SALT_ROUNDS,
   MIN_PASSWORD_LENGTH,
-  ErrorRegisterMessage
+  ErrorRegisterMessage,
+  ErrorAuthMessage
 };
