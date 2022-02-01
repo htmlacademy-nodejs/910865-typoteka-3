@@ -9,6 +9,7 @@ const CommentService = require(`../data-service/comment`);
 const ArticleService = require(`../data-service/article`);
 const {HttpCode} = require(`../../constants`);
 const initDb = require("../lib/init-db");
+const passwordUtils = require(`../lib/password`);
 
 const mockCategories = [
   `Деревья`,
@@ -17,12 +18,39 @@ const mockCategories = [
   `Разное`
 ];
 
+const mockUsers = [
+  {
+    name: `Иван`,
+    surname: `Иванов`,
+    email: `ivanov@example.com`,
+    passwordHash: passwordUtils.hashSync(`ivanov`),
+    avatar: `avatar-1.png`
+  },
+  {
+    name: `Пётр`,
+    surname: `Петров`,
+    email: `petrov@example.com`,
+    passwordHash: passwordUtils.hashSync(`petrov`),
+    avatar: `avatar-2.png`
+  }
+];
+
 const mockArticles = [
   {
+    "userId": 1,
     "comments":[
-      {"text":"Совсем немного..."},
-      {"text":"Хочу такую же футболку :-) Плюсую, но слишком много буквы!"},
-      {"text":"Мне кажется или я уже читал это где-то?"}
+      {
+        "text":"Совсем немного...",
+        "userId": 2
+      },
+      {
+        "text":"Хочу такую же футболку :-) Плюсую, но слишком много буквы!",
+        "userId": 2
+      },
+      {
+        "text":"Мне кажется или я уже читал это где-то?",
+        "userId": 2
+      }
     ],
     "createdAt": "2022-01-29T14:37:21.725Z",
     "title":"Рок — это протест",
@@ -32,9 +60,16 @@ const mockArticles = [
     "category":["Разное"],
   },
   {
+    "userId": 2,
     "comments":[
-      {"text":"Это где ж такие красоты?"},
-      {"text":"Плюсую, но слишком много буквы!"},
+      {
+        "text":"Это где ж такие красоты?",
+        "userId": 1
+      },
+      {
+        "text":"Плюсую, но слишком много буквы!",
+        "userId": 1
+      },
     ],
     "createdAt": "2022-01-29T14:37:21.725Z",
     "title":"Учим HTML и CSS",
@@ -48,7 +83,7 @@ const mockArticles = [
 const createAPI = async () => {
   const mockDB = new Sequelize(`sqlite::memory:`, {logging: false});
 
-  await initDb(mockDB, {categories: mockCategories, articles: mockArticles});
+  await initDb(mockDB, {categories: mockCategories, articles: mockArticles, users: mockUsers});
 
   const app = express();
 
@@ -100,7 +135,8 @@ describe(`API creates an article if data is valid`, () => {
     "fullText":"test text",
     "createdAt": "2022-01-29T14:37:21.725Z",
     "categories":[4],
-    "picture": ""
+    "picture": "",
+    "userId": 1
   };
 
   beforeAll(async () => {
@@ -118,6 +154,8 @@ describe(`API creates an article if data is valid`, () => {
     expect(response.body.fullText).toEqual(`test text`);
     expect(response.body.createdAt).toEqual(`2022-01-29T14:37:21.725Z`);
     expect(response.body.picture).toEqual(``);
+    expect(response.body.userId).toEqual(1);
+
   });
   test(`Articles count is changed`, () => {
       request(app)
@@ -160,7 +198,8 @@ describe(`API changes existent article`, () => {
     "fullText":"test text",
     "createdAt": "2022-01-29T14:37:21.725Z",
     "categories":[4],
-    "picture": ""
+    "picture": "",
+    "userId": 1
   };
 
   beforeAll(async () => {
@@ -185,7 +224,8 @@ describe(`API changes existent article`, () => {
       "createdAt": "2022-01-29T14:37:21.725Z",
       "fullText":"test text",
       "categories":[5],
-      "picture": ""
+      "picture": "",
+      "userId": 1
     };
 
     return request(app)
@@ -251,7 +291,8 @@ describe(`API workds correctly while trying to post a comment`, () => {
     response = await request(app)
       .post(`/articles/1/comments`)
       .send({
-        text: `test article text test article text`
+        text: `test article text test article text`,
+        userId: 2
       });
   });
 
@@ -269,18 +310,19 @@ test(`API returns 404 while trying to post a comment to an absent article`, () =
   return request(app)
     .post(`/articles/178/comments`)
     .send({
-      text: `test article text test article text`
+      text: `test article text test article text`,
+      userId: 2
     })
     .expect(HttpCode.NOT_FOUND);
 });
 
-test(`API works correctly while trying to send wrong obj`, () => {
-  return request(app)
+test(`API works correctly while trying to send wrong obj`, async () => {
+  await request(app)
     .post(`/articles/1/comments`)
     .send({
       cat: `dog`
-    }).then(() =>
-    expect(HttpCode.BAD_REQUEST));
+    });
+  return expect(HttpCode.BAD_REQUEST);
 });
 
 test(`API refuses to delete non-existent comment`, async () => {
