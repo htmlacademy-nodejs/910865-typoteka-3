@@ -21,6 +21,7 @@ articlesRouter.get(`/category/:id`, async (req, res) => {
   ]);
   const totalPages = Math.ceil(count / ARTICLES_PER_PAGE);
   const activeCategoryTab = categories.find((it) => it.id === selectedCategoryId);
+  const {user} = req.session;
 
   if (activeCategoryTab === undefined) {
     return res.render(`errors/404`);
@@ -32,14 +33,16 @@ articlesRouter.get(`/category/:id`, async (req, res) => {
     categories,
     page,
     totalPages,
-    activeCategoryTab: activeCategoryTab.name
+    activeCategoryTab: activeCategoryTab.name,
+    user
   });
 });
 
 articlesRouter.get(`/add`, async (req, res) => {
   const categories = await api.getCategories();
+  const {user} = req.session;
 
-  res.render(`articles/post`, {wrapper: {class: `wrapper`}, categories});
+  res.render(`articles/post`, {wrapper: {class: `wrapper`}, categories, user});
 });
 
 articlesRouter.post(`/add`, upload.single(`upload`), async (req, res) => {
@@ -68,12 +71,13 @@ articlesRouter.get(`/edit/:id`, async (req, res) => {
   const {id} = req.params;
   const article = await api.getArticle(id, {comments: false}).catch((err) => console.log(err));
   const categories = await api.getCategories();
+  const {user} = req.session;
 
   if (!article) {
     return res.render(`errors/404`);
   }
 
-  return res.render(`articles/post`, {wrapper: {class: `wrapper`}, article, categories});
+  return res.render(`articles/post`, {wrapper: {class: `wrapper`}, article, categories, user});
 });
 
 articlesRouter.post(`/edit/:id`, upload.single(`upload`), async (req, res) => {
@@ -104,6 +108,7 @@ articlesRouter.get(`/:id`, async (req, res) => {
   const article = await api.getArticle(id, {comments: true}).catch((err) => console.log(err));
   const categoriesList = await api.getCategories(true);
   const categories = [];
+  const {user} = req.session;
 
   if (!article) {
     return res.render(`errors/404`);
@@ -115,7 +120,7 @@ articlesRouter.get(`/:id`, async (req, res) => {
     }
   }));
 
-  return res.render(`articles/post-detail`, {wrapper: {class: `wrapper`}, article, categories});
+  return res.render(`articles/post-detail`, {wrapper: {class: `wrapper`}, article, categories, user});
 });
 
 articlesRouter.post(`/:id/comments`, async (req, res) => {

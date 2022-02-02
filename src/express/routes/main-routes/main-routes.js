@@ -19,8 +19,9 @@ mainRouter.get(`/`, async (req, res) => {
     api.getCategories(true)
   ]);
   const totalPages = Math.ceil(count / ARTICLES_PER_PAGE);
+  const {user} = req.session;
 
-  res.render(`main/main`, {wrapper: {class: `wrapper`}, articles, page, totalPages, categories});
+  res.render(`main/main`, {wrapper: {class: `wrapper`}, articles, page, totalPages, categories, user});
 });
 
 mainRouter.get(`/register`, (req, res) => res.render(`main/sign-up`, {wrapper: {class: `wrapper`}}));
@@ -50,22 +51,37 @@ mainRouter.get(`/login`, (req, res) => res.render(`main/login`, {wrapper: {class
 
 mainRouter.post(`/login`, async (req, res) => {
   try {
-    await api.authenticate(req.body);
-    res.redirect(`/`);
+    const user = await api.auth(req.body[`email`], req.body[`password`]);
+
+    req.session.user = user;
+    req.session.save(() => {
+      res.redirect(`/`);
+    });
   } catch (err) {
     const validationMessages = prepareErrors(err);
+    const {user} = req.session;
 
-    res.render(`main/login`, {wrapper: {class: `wrapper`}, validationMessages});
+    res.render(`main/login`, {wrapper: {class: `wrapper`}, user, validationMessages});
   }
+});
+
+mainRouter.get(`/logout`, (req, res) => {
+  delete req.session.user;
+  res.redirect(`/`);
 });
 
 mainRouter.get(`/search`, async (req, res) => {
   const {query} = req.query;
   const results = await api.search(query);
+  const {user} = req.session;
 
-  res.render(`main/search-result`, {wrapper: {class: `wrapper-color`}, results, query});
+  res.render(`main/search-result`, {wrapper: {class: `wrapper-color`}, results, query, user});
 });
 
-mainRouter.get(`/categories`, (req, res) => res.render(`main/all-categories`, {wrapper: {class: `wrapper wrapper--nobackground`}}));
+mainRouter.get(`/categories`, (req, res) => {
+  const {user} = req.session;
+
+  res.render(`main/all-categories`, {wrapper: {class: `wrapper wrapper--nobackground`}, user});
+});
 
 module.exports = mainRouter;

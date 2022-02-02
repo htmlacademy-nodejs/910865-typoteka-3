@@ -3,15 +3,42 @@
 const express = require(`express`);
 const path = require(`path`);
 const helmet = require(`helmet`);
+const session = require(`express-session`);
 
 const mainRoutes = require(`./routes/main-routes/main-routes`);
 const articlesRoutes = require(`./routes/articles-routes/articles-routes`);
 const commentsRoutes = require(`./routes/comments-routes/comments-routes`);
-const {DEFAULT_PORT, PUBLIC_DIR, TEMPLATES_DIR, HttpCode, UPLOAD_DIR_NAME} = require(`../constants`);
+const sequelize = require(`../service/lib/sequelize`);
+const {DEFAULT_PORT, PUBLIC_DIR, TEMPLATES_DIR, HttpCode, UPLOAD_DIR_NAME,
+  SESSION_SECRET_IS_NOT_DEFINED_MESSAGE, SessionStore} = require(`../constants`);
+
+const SequelizeStore = require(`connect-session-sequelize`)(session.Store);
 
 const app = express();
+const mySessionStore = new SequelizeStore({
+  db: sequelize,
+  expiration: SessionStore.EXPIRATION,
+  checkExpirationInterval: SessionStore.CHECK_EXPIRATION_INTERVAL
+});
 
-app.use(express.urlencoded({extended: true}));
+sequelize.sync({force: false});
+app.use(express.urlencoded({extended: false}));
+
+const {SESSION_SECRET} = process.env;
+
+if (!SESSION_SECRET) {
+  throw new Error(SESSION_SECRET_IS_NOT_DEFINED_MESSAGE);
+}
+
+app.use(
+    session({
+      secret: SESSION_SECRET,
+      store: mySessionStore,
+      resave: false,
+      proxy: true,
+      saveUninitialized: false
+    })
+);
 app.use(
     helmet({
       contentSecurityPolicy: {

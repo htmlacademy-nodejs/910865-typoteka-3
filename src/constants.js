@@ -171,6 +171,13 @@ const HttpMethod = {
 
 const SALT_ROUNDS = 10;
 
+const SESSION_SECRET_IS_NOT_DEFINED_MESSAGE = `SESSION_SECRET environment variable is not defined`;
+
+const SessionStore = {
+  EXPIRATION: 180000,
+  CHECK_EXPIRATION_INTERVAL: 60000
+};
+
 module.exports = {
   DEFAULT_COUNT,
   DEFAULT_PORT,
@@ -222,5 +229,7 @@ module.exports = {
   SALT_ROUNDS,
   MIN_PASSWORD_LENGTH,
   ErrorRegisterMessage,
-  ErrorAuthMessage
+  ErrorAuthMessage,
+  SESSION_SECRET_IS_NOT_DEFINED_MESSAGE,
+  SessionStore
 };
