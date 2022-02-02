@@ -71,6 +71,13 @@ class ArticleService {
       include.push({
         model: this._Comment,
         as: Aliase.COMMENTS,
+        include: {
+          model: this._User,
+          as: Aliase.USERS,
+          attributes: {
+            exclude: [`passwordHash`]
+          }
+        }
       });
     }
 

@@ -3,15 +3,28 @@ extends ../layout
 block content
   main
     section.search-page
-      .search-page__wrapper
+      -
+        const firstTimeOpened = (results.length === 0) && !((query === undefined) || (query === ``));
+
+        if (results.length > 0) {
+          results.forEach((it) => {
+            let resultTitle = it.title;
+
+            resultTitle = resultTitle.replace(query, `<b>${query}</b>`);
+            it.title = resultTitle;
+          });
+        }
+      .search-page__wrapper(class=`${firstTimeOpened ? `search-page__wrapper--empty` : ``}`)
         h1 Поиск
         .search.search-page__form
           form(action='/search' method='get' autocomplete="off")
             label
-              input(type='text' name='query' placeholder='Что ищем?' value='Путешествия')
+              input(type='text' name='query' placeholder='Что ищем?' value=`${query ? query : ``}`)
             button.search__button.button.button--transparent(type='submit') Найти
-          each article in results
-            .search__result
-              +fullDate(`search__date`, article.createdAt)
-              a.search__link
-                | #{article.title}
+        if (firstTimeOpened)
+          p.search-page__empty Ничего не нашлось
+        each article in results
+          .search__result
+            +fullDate(`search__date`, article.createdAt)
+            a.search__link(href=`/articles/${article.id}`)
+              | !{article.title}

@@ -13,6 +13,10 @@ class SearchService {
   }
 
   async findMatching(query) {
+    if (query === ``) {
+      return [];
+    }
+
     const articles = await this._Article.findAll({
       where: {
         title: {
