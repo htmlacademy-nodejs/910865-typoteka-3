@@ -48,6 +48,17 @@ mainRouter.post(`/register`, upload.single(`upload`), async (req, res) => {
 
 mainRouter.get(`/login`, (req, res) => res.render(`main/login`, {wrapper: {class: `wrapper`}}));
 
+mainRouter.post(`/login`, async (req, res) => {
+  try {
+    await api.authenticate(req.body);
+    res.redirect(`/`);
+  } catch (err) {
+    const validationMessages = prepareErrors(err);
+
+    res.render(`main/login`, {wrapper: {class: `wrapper`}, validationMessages});
+  }
+});
+
 mainRouter.get(`/search`, async (req, res) => {
   const {query} = req.query;
   const results = await api.search(query);

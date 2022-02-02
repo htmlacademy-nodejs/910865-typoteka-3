@@ -146,7 +146,7 @@ const ErrorRegisterMessage = {
 const ErrorAuthMessage = {
   EMAIL: `Электронный адрес не существует`,
   PASSWORD: `Неверный пароль`
-}
+};
 
 const MIN_TITLE_TEXT_LENGTH = 30;
 
