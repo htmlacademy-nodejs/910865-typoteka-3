@@ -131,18 +131,6 @@ describe(`API refuses to create user if data is invalid`, () => {
     app = await createAPI();
   });
 
-  test(`Without any required property response code is 400`, async () => {
-    for (const key of Object.keys(validUserData)) {
-      const badUserData = {...validUserData};
-
-      delete badUserData[key];
-      await request(app)
-        .post(`/user`)
-        .send(badUserData)
-        .expect(HttpCode.BAD_REQUEST);
-    }
-  });
-
   test(`When field type is wrong response code is 400`, async () => {
     const badUsers = [
       {...validUserData, firstName: true},

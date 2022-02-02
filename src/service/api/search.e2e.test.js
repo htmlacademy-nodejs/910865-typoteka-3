@@ -113,7 +113,7 @@ describe(`API works correctly on empty search query`, () => {
       .get(`/search`);
   });
 
-  test(`API returns 400 when query string is absent`, () => expect(response.statusCode).toBe(HttpCode.BAD_REQUEST));
+  test(`API returns 200 when query string is absent`, () => expect(response.statusCode).toBe(HttpCode.OK));
   test(`API returns empty array when query string is absent`, () => expect(response.body.length).toBe(0));
 });
 
@@ -128,6 +128,6 @@ describe(`API works correctly based on unmatching search query`, () => {
       });
   });
 
-  test(`API returns code 404 if nothing is found`, () => expect(response.statusCode).toBe(HttpCode.NOT_FOUND));
+  test(`API returns code 200 if nothing is found`, () => expect(response.statusCode).toBe(HttpCode.OK));
   test(`API returns empty array when query string doesn't match to anything`, () => expect(response.body.length).toBe(0));
 });
