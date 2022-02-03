@@ -4,6 +4,7 @@ const {Router} = require(`express`);
 
 const {getAPI} = require(`../../api`);
 const upload = require(`../../middlewares/upload`);
+const authRedirect = require(`../../middlewares/auth-redirect`);
 const {ARTICLES_PER_PAGE} = require(`../../../constants`);
 const {prepareErrors, ensureArray} = require(`../../../utils`);
 
@@ -38,7 +39,7 @@ articlesRouter.get(`/category/:id`, async (req, res) => {
   });
 });
 
-articlesRouter.get(`/add`, async (req, res) => {
+articlesRouter.get(`/add`, authRedirect, async (req, res) => {
   const categories = await api.getCategories();
   const {user} = req.session;
 
@@ -47,13 +48,15 @@ articlesRouter.get(`/add`, async (req, res) => {
 
 articlesRouter.post(`/add`, upload.single(`upload`), async (req, res) => {
   const {body, file} = req;
+  const {user} = req.session;
   const data = {
     title: body.title,
     createdAt: `${body.date} ${new Date(Date.now()).getHours() < 10 ? `0${new Date(Date.now()).getHours()}` : new Date(Date.now()).getHours()}:${new Date(Date.now()).getMinutes() < 10 ? `0${new Date(Date.now()).getMinutes()}` : new Date(Date.now()).getMinutes()}:${new Date(Date.now()).getSeconds() < 10 ? `0${new Date(Date.now()).getSeconds()}` : new Date(Date.now()).getSeconds()}`,
     announce: body.announcement,
     fullText: body[`full-text`],
     picture: file ? file.filename : ``,
-    categories: ensureArray(body.category)
+    categories: ensureArray(body.category),
+    userId: user.id
   };
 
   try {
@@ -63,11 +66,11 @@ articlesRouter.post(`/add`, upload.single(`upload`), async (req, res) => {
     const validationMessages = prepareErrors(err);
     const categories = await api.getCategories();
 
-    res.render(`articles/post`, {wrapper: {class: `wrapper`}, categories, validationMessages});
+    res.render(`articles/post`, {wrapper: {class: `wrapper`}, categories, validationMessages, user});
   }
 });
 
-articlesRouter.get(`/edit/:id`, async (req, res) => {
+articlesRouter.get(`/edit/:id`, authRedirect, async (req, res) => {
   const {id} = req.params;
   const article = await api.getArticle(id, {comments: false}).catch((err) => console.log(err));
   const categories = await api.getCategories();
@@ -83,13 +86,15 @@ articlesRouter.get(`/edit/:id`, async (req, res) => {
 articlesRouter.post(`/edit/:id`, upload.single(`upload`), async (req, res) => {
   const {id} = req.params;
   const {body, file} = req;
+  const {user} = req.session;
   const data = {
     title: body.title,
     createdAt: `${body.date} ${new Date(Date.now()).getHours() < 10 ? `0${new Date(Date.now()).getHours()}` : new Date(Date.now()).getHours()}:${new Date(Date.now()).getMinutes() < 10 ? `0${new Date(Date.now()).getMinutes()}` : new Date(Date.now()).getMinutes()}:${new Date(Date.now()).getSeconds() < 10 ? `0${new Date(Date.now()).getSeconds()}` : new Date(Date.now()).getSeconds()}`,
     announce: body.announcement,
     fullText: body[`full-text`],
     picture: file ? file.filename : (body.photo || ``),
-    categories: ensureArray(body.category)
+    categories: ensureArray(body.category),
+    userId: user.id
   };
 
   try {
@@ -99,7 +104,7 @@ articlesRouter.post(`/edit/:id`, upload.single(`upload`), async (req, res) => {
     const validationMessages = prepareErrors(err);
     const categories = await api.getCategories();
 
-    res.render(`articles/post`, {wrapper: {class: `wrapper`}, categories, validationMessages});
+    res.render(`articles/post`, {wrapper: {class: `wrapper`}, categories, validationMessages, user});
   }
 });
 
@@ -126,9 +131,10 @@ articlesRouter.get(`/:id`, async (req, res) => {
 articlesRouter.post(`/:id/comments`, async (req, res) => {
   const {id} = req.params;
   const {message} = req.body;
+  const {user} = req.session;
 
   try {
-    await api.createComment(id, {text: message});
+    await api.createComment(id, {text: message, userId: user.id});
     res.redirect(`/articles/${id}`);
   } catch (err) {
     const validationMessages = prepareErrors(err);
@@ -137,7 +143,7 @@ articlesRouter.post(`/:id/comments`, async (req, res) => {
       api.getCategories(true)
     ]);
 
-    res.render(`articles/post-detail`, {wrapper: {class: `wrapper`}, article, categories, validationMessages});
+    res.render(`articles/post-detail`, {wrapper: {class: `wrapper`}, article, categories, validationMessages, user});
   }
 });
 

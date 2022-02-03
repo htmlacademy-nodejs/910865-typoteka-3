@@ -10,12 +10,27 @@ header.header
         li.header__list-item
           a.header__enter(href='/login') Вход с паролем
   if (user !== undefined)
-    nav.header__nav
-      ul.header__nav-list
-        li.header__list-item
-          p #{user.name} #{user.surname}
-        li.header__list-item
-          a.header__exit(href="/logout") Выйти
-    a.header__avatar.avatar
-      img(src=`/img/${user.avatar}` alt="аватар пользователя")
+    if (user.id !== 1)
+      nav.header__nav
+        ul.header__nav-list
+          li.header__list-item
+            p #{user.name} #{user.surname}
+          li.header__list-item
+            a.header__exit(href="/logout") Выйти
+      a.header__avatar.avatar
+        img(src=`/img/${user.avatar}` alt="аватар пользователя")
+    else
+      a(href="/articles/add")
+        button.button.button--colored.header__button-new Новая запись
+      .header__dropdown
+        a.button.button--burger.header__burger(href='#') Открыть меню
+        ul.navigation.header__navigation
+          li.navigation__item
+            a(href='main.html') Пункт меню
+          li.navigation__item
+            a(href='main.html') Пункт меню
+          li.navigation__item
+            a(href='main.html') Пункт меню
+          li.navigation__item
+            a(href='main.html') Пункт меню
   a.header__search.button.button--search(href='/search' aria-label='поиск по сайту')

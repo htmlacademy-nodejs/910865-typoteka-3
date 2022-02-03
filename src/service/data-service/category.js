@@ -38,6 +38,34 @@ class CategoryService {
       return await this._Category.findAll({raw: true});
     }
   }
+
+  async create(categoryData) {
+    const category = await this._Category.create(categoryData);
+
+    return category.get();
+  }
+
+  async update(id, categoryData) {
+    const [affectedRows] = await this._Category.update(categoryData, {
+      where: {id},
+    });
+
+    return !!affectedRows;
+  }
+
+  async drop(id) {
+    const deletedRows = await this._Category.destroy({
+      where: {id}
+    });
+
+    return !!deletedRows;
+  }
+
+  async findByCategoryName(name) {
+    const category = await this._Category.findAll({where: {name}});
+
+    return category.map((it) => it.get());
+  }
 }
 
 module.exports = CategoryService;

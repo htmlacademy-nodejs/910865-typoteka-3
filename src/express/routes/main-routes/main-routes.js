@@ -4,6 +4,7 @@ const {Router} = require(`express`);
 
 const {getAPI} = require(`../../api`);
 const upload = require(`../../middlewares/upload`);
+const authRedirect = require(`../../middlewares/auth-redirect`);
 const {prepareErrors} = require(`../../../utils`);
 const {ARTICLES_PER_PAGE} = require(`../../../constants`);
 
@@ -78,10 +79,57 @@ mainRouter.get(`/search`, async (req, res) => {
   res.render(`main/search-result`, {wrapper: {class: `wrapper-color`}, results, query, user});
 });
 
-mainRouter.get(`/categories`, (req, res) => {
+mainRouter.get(`/categories`, authRedirect, async (req, res) => {
+  const {user} = req.session;
+  const categories = await api.getCategories();
+
+  res.render(`main/all-categories`, {wrapper: {class: `wrapper wrapper--nobackground`}, categories, user});
+});
+
+mainRouter.post(`/categories`, async (req, res) => {
+  try {
+    const newCategory = await api.createCategory({name: req.body[`add-category`]});
+
+    res.redirect(`/articles/category/${newCategory.id}`);
+  } catch (error) {
+    const validationAddMessages = prepareErrors(error);
+    const {user} = req.session;
+    const categories = await api.getCategories();
+
+    res.render(`main/all-categories`, {wrapper: {class: `wrapper wrapper--nobackground`}, categories, validationAddMessages, user});
+  }
+});
+
+mainRouter.post(`/categories/:id`, async (req, res) => {
+  const {id} = req.params;
+  const {action} = req.body;
+  const inputFieldName = `category-${id}`;
+  const newCategoryName = req.body[inputFieldName];
+  const categories = await api.getCategories();
   const {user} = req.session;
 
-  res.render(`main/all-categories`, {wrapper: {class: `wrapper wrapper--nobackground`}, user});
+  if (action === `update`) {
+    try {
+      await api.updateCategory(id, {name: newCategoryName});
+      res.redirect(`/articles/category/${id}`);
+    } catch (error) {
+      const validationEditMessages = prepareErrors(error);
+      const errorInputId = parseInt(id, 10);
+
+      res.render(`main/all-categories`, {wrapper: {class: `wrapper wrapper--nobackground`}, categories, errorInputId, validationEditMessages, user});
+    }
+  }
+
+  if (action === `delete`) {
+    try {
+      await api.deleteCategory(id);
+      res.redirect(`/categories`);
+    } catch (error) {
+      const validationEditMessages = prepareErrors(error);
+
+      res.render(`main/all-categories`, {wrapper: {class: `wrapper wrapper--nobackground`}, categories, validationEditMessages, user});
+    }
+  }
 });
 
 module.exports = mainRouter;

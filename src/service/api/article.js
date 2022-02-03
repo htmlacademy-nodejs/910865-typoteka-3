@@ -103,13 +103,9 @@ module.exports = (app, articleService, commentService) => {
 
   articleRoutes.post(`/:articleId/comments`, [routeParamsValidator, commentValidator, articleExist(articleService)], async (req, res) => {
     const {article} = res.locals;
-    const {text} = req.body;
+    const {text, userId} = req.body;
 
-    if (!text) {
-      return res.status(HttpCode.BAD_REQUEST).json([]);
-    }
-
-    const comment = await commentService.create(article.id, text);
+    const comment = await commentService.create(article.id, userId, text);
 
     return res.status(HttpCode.CREATED)
       .json(comment);

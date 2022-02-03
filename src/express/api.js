@@ -34,6 +34,26 @@ class API {
     return this._load(`/categories`, {params: {count}});
   }
 
+  createCategory(data) {
+    return this._load(`/categories`, {
+      method: HttpMethod.POST,
+      data
+    });
+  }
+
+  updateCategory(id, data) {
+    return this._load(`/categories/${id}`, {
+      method: HttpMethod.PUT,
+      data
+    });
+  }
+
+  deleteCategory(id) {
+    return this._load(`/categories/${id}`, {
+      method: HttpMethod.DELETE
+    });
+  }
+
   createArticle(data) {
     return this._load(`/articles`, {
       method: HttpMethod.POST,

@@ -72,9 +72,7 @@ const HttpCode = {
   FORBIDDEN: 403,
   UNAUTHORIZED: 401,
   CREATED: 201,
-  EMPTY_LIST: 204,
-  BAD_REQUEST: 400,
-  UNPROCESSABLE_ENTITY: 422,
+  BAD_REQUEST: 400
 };
 
 const MockGenerationStatus = {
@@ -178,6 +176,17 @@ const SessionStore = {
   CHECK_EXPIRATION_INTERVAL: 60000
 };
 
+const ErrorCategoryMessage = {
+  EMPTY: `Не указано название категории`,
+  CATEGORY_NAME_MIN: `Название категории содержит меньше 5 символов`,
+  CATEGORY_NAME_MAX: `Название категории содержит более 30 символов`,
+  CATEGORY_EXIST: `Категория уже существует`
+};
+
+const MIN_CATEGORY_NAME_LENGTH = 5;
+
+const MAX_CATEGORY_NAME_LENGTH = 30;
+
 module.exports = {
   DEFAULT_COUNT,
   DEFAULT_PORT,
@@ -231,5 +240,8 @@ module.exports = {
   ErrorRegisterMessage,
   ErrorAuthMessage,
   SESSION_SECRET_IS_NOT_DEFINED_MESSAGE,
-  SessionStore
+  SessionStore,
+  ErrorCategoryMessage,
+  MIN_CATEGORY_NAME_LENGTH,
+  MAX_CATEGORY_NAME_LENGTH
 };

@@ -48,14 +48,13 @@ app.use(
       },
     })
 );
-app.use(express.json());
 app.use(`/`, mainRoutes);
 app.use(`/articles`, articlesRoutes);
 app.use(`/my`, commentsRoutes);
 app.use(express.static(path.resolve(__dirname, PUBLIC_DIR)));
 app.use(express.static(path.resolve(__dirname, UPLOAD_DIR_NAME)));
 app.use((req, res) => res.status(HttpCode.NOT_FOUND).render(`errors/404`));
-app.use((err, req, res) => res.status(HttpCode.INTERNAL_SERVER_ERROR).render(`errors/500`));
+app.use((err, _req, res, _next) => res.status(HttpCode.INTERNAL_SERVER_ERROR).render(`errors/500`));
 app.set(`views`, path.resolve(__dirname, TEMPLATES_DIR));
 app.set(`view engine`, `pug`);
 app.listen(DEFAULT_PORT);
