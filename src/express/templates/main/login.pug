@@ -18,5 +18,6 @@ block content
               label
                 input(type='password' name='password' placeholder='Пароль' required='')
             if (validationMessages)
-              p.form__error-message Некоторая ошибка произошла, беда!
+              each message in validationMessages
+                p.form__error-message #{message}
             button.form__submit-btn.form__submit-btn--log-in.button.button--colored(type='submit') Войти
