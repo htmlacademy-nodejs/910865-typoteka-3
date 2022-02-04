@@ -2,11 +2,12 @@
 
 const {Router} = require(`express`);
 
-const {getAPI} = require(`../../api`);
-const upload = require(`../../middlewares/upload`);
-const authRedirect = require(`../../middlewares/auth-redirect`);
-const {ARTICLES_PER_PAGE} = require(`../../../constants`);
-const {prepareErrors, ensureArray} = require(`../../../utils`);
+const {getAPI} = require(`../api`);
+const upload = require(`../middlewares/upload`);
+const authRedirect = require(`../middlewares/auth-redirect`);
+const checkAdminRole = require(`../middlewares/check-admin-role`);
+const {ARTICLES_PER_PAGE} = require(`../../constants`);
+const {prepareErrors, ensureArray} = require(`../../utils`);
 
 const articlesRouter = new Router();
 const api = getAPI();
@@ -39,7 +40,7 @@ articlesRouter.get(`/category/:id`, async (req, res) => {
   });
 });
 
-articlesRouter.get(`/add`, authRedirect, async (req, res) => {
+articlesRouter.get(`/add`, authRedirect, checkAdminRole, async (req, res) => {
   const categories = await api.getCategories();
   const {user} = req.session;
 
@@ -70,7 +71,7 @@ articlesRouter.post(`/add`, upload.single(`upload`), async (req, res) => {
   }
 });
 
-articlesRouter.get(`/edit/:id`, authRedirect, async (req, res) => {
+articlesRouter.get(`/edit/:id`, authRedirect, checkAdminRole, async (req, res) => {
   const {id} = req.params;
   const article = await api.getArticle(id, {comments: false}).catch((err) => console.log(err));
   const categories = await api.getCategories();

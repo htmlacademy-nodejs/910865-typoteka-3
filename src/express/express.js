@@ -5,9 +5,9 @@ const path = require(`path`);
 const helmet = require(`helmet`);
 const session = require(`express-session`);
 
-const mainRoutes = require(`./routes/main-routes/main-routes`);
-const articlesRoutes = require(`./routes/articles-routes/articles-routes`);
-const commentsRoutes = require(`./routes/comments-routes/comments-routes`);
+const mainRoutes = require(`./routes/main-routes`);
+const articlesRoutes = require(`./routes/articles-routes`);
+const myRoutes = require(`./routes/my-routes`);
 const sequelize = require(`../service/lib/sequelize`);
 const {DEFAULT_PORT, PUBLIC_DIR, TEMPLATES_DIR, HttpCode, UPLOAD_DIR_NAME,
   SESSION_SECRET_IS_NOT_DEFINED_MESSAGE, SessionStore} = require(`../constants`);
@@ -50,7 +50,7 @@ app.use(
 );
 app.use(`/`, mainRoutes);
 app.use(`/articles`, articlesRoutes);
-app.use(`/my`, commentsRoutes);
+app.use(`/my`, myRoutes);
 app.use(express.static(path.resolve(__dirname, PUBLIC_DIR)));
 app.use(express.static(path.resolve(__dirname, UPLOAD_DIR_NAME)));
 app.use((req, res) => res.status(HttpCode.NOT_FOUND).render(`errors/404`));
