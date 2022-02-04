@@ -73,11 +73,13 @@ articlesRouter.post(`/add`, upload.single(`upload`), async (req, res) => {
 
 articlesRouter.get(`/edit/:id`, authRedirect, checkAdminRole, async (req, res) => {
   const {id} = req.params;
-  const article = await api.getArticle(id, {comments: false}).catch((err) => console.log(err));
-  const categories = await api.getCategories();
+  const [article, categories] = await Promise.all([
+    api.getArticle(id, {comments: false}).catch((err) => console.log(err)),
+    api.getCategories()
+  ]);
   const {user} = req.session;
 
-  if (!article) {
+  if (!article) { // ?
     return res.render(`errors/404`);
   }
 
@@ -103,20 +105,25 @@ articlesRouter.post(`/edit/:id`, upload.single(`upload`), async (req, res) => {
     res.redirect(`/my`);
   } catch (err) {
     const validationMessages = prepareErrors(err);
-    const categories = await api.getCategories();
+    const [article, categories] = await Promise.all([
+      api.getArticle(id, {comments: false}),
+      api.getCategories()
+    ]);
 
-    res.render(`articles/post`, {wrapper: {class: `wrapper`}, categories, validationMessages, user});
+    res.render(`articles/post`, {wrapper: {class: `wrapper`}, article, categories, validationMessages, user});
   }
 });
 
 articlesRouter.get(`/:id`, async (req, res) => {
   const {id} = req.params;
-  const article = await api.getArticle(id, {comments: true}).catch((err) => console.log(err));
-  const categoriesList = await api.getCategories(true);
+  const [article, categoriesList] = await Promise.all([
+    api.getArticle(id, {comments: true}).catch((err) => console.log(err)),
+    api.getCategories(true)
+  ]);
   const categories = [];
   const {user} = req.session;
 
-  if (!article) {
+  if (!article) { // ?
     return res.render(`errors/404`);
   }
 

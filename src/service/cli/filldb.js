@@ -82,10 +82,12 @@ module.exports = {
     }
     logger.info(`Connection to database established`);
 
-    const sentences = await readContent(FILE_SENTENCES_PATH);
-    const categories = await readContent(FILE_CATEGORIES_PATH);
-    const titles = await readContent(FILE_TITLES_PATH);
-    const comments = await readContent(FILE_COMMENTS_PATH);
+    const [sentences, categories, titles, comments] = await Promise.all([
+      readContent(FILE_SENTENCES_PATH),
+      readContent(FILE_CATEGORIES_PATH),
+      readContent(FILE_TITLES_PATH),
+      readContent(FILE_COMMENTS_PATH)
+    ]);
     const users = [
       {
         name: `Иван`,

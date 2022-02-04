@@ -33,11 +33,6 @@ module.exports = (app, articleService, commentService) => {
     const {comments} = req.query;
     const article = await articleService.findOne(articleId, comments);
 
-    if (!article) {
-      return res.status(HttpCode.NOT_FOUND)
-        .send(`Not found with ${articleId}`);
-    }
-
     return res.status(HttpCode.OK)
       .json(article);
   });
@@ -64,22 +59,19 @@ module.exports = (app, articleService, commentService) => {
     if (req.body.categories) {
       const article = await articleService.findOne(articleId);
 
-      await article.categories.forEach((it) => article.removeCategory(it));
-      await article.addCategories(req.body.categories);
+      await Promise.all([
+        article.categories.forEach((it) => article.removeCategory(it)),
+        article.addCategories(req.body.categories)
+      ]);
     }
 
     res.status(HttpCode.OK)
       .json(articleUpdateStatus);
   });
 
-  articleRoutes.delete(`/:articleId`, routeParamsValidator, async (req, res) => {
+  articleRoutes.delete(`/:articleId`, routeParamsValidator, articleExist(articleService), async (req, res) => {
     const {articleId} = req.params;
     const article = await articleService.drop(articleId);
-
-    if (!article) {
-      return res.status(HttpCode.NOT_FOUND)
-        .send(NOT_FOUND_ERROR_MESSAGE);
-    }
 
     return res.status(HttpCode.OK)
       .json(article);

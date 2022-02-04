@@ -58,6 +58,7 @@ myRouter.post(`/categories/:id`, async (req, res) => {
       await api.updateCategory(id, {name: newCategoryName});
       res.redirect(`/articles/category/${id}`);
     } catch (error) {
+      // ??? почему при ошибке перебрасывает с /my/categories на /my/categories/${id}
       const validationEditMessages = prepareErrors(error);
       const errorInputId = parseInt(id, 10);
 

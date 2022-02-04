@@ -42,7 +42,7 @@ block content
               p
                 | #{article.fullText}
       .post__wrapper.post__wrapper--comments
-        section.post__comments.comments
+        section.post__comments.comments(id="comments-anchor")
           h2.comments__title.title.title--middle #{article.comments.length === 0 ? `Комментарии отсутствуют` : `Комментарии`}
           if (article.comments.length !== 0)
             ul.comments__list

@@ -22,6 +22,8 @@ const MAX_ELEMENT_COUNT_MESSAGE = `No more than 1000 publications`;
 
 const NOT_FOUND_ERROR_MESSAGE = `Not found`;
 
+const SERVICE_UNAVAILABLE_MESSAGE = `Service unavailable`;
+
 const ARTICLE_PICTURES = [`forest`, `sea`, `skyscraper`];
 
 const FILE_EXTENSIONS = [`.jpg`, `.png`, `.webp`];
@@ -69,6 +71,7 @@ const HttpCode = {
   OK: 200,
   NOT_FOUND: 404,
   INTERNAL_SERVER_ERROR: 500,
+  SERVICE_UNAVAILABLE: 503,
   FORBIDDEN: 403,
   UNAUTHORIZED: 401,
   CREATED: 201,
@@ -243,5 +246,6 @@ module.exports = {
   SessionStore,
   ErrorCategoryMessage,
   MIN_CATEGORY_NAME_LENGTH,
-  MAX_CATEGORY_NAME_LENGTH
+  MAX_CATEGORY_NAME_LENGTH,
+  SERVICE_UNAVAILABLE_MESSAGE
 };

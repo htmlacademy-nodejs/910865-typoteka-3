@@ -6,7 +6,7 @@ const routes = require(`../api`);
 const sequelize = require(`../lib/sequelize`);
 const {getLogger} = require(`../lib/logger`);
 
-const {DEFAULT_PORT, HttpCode, NOT_FOUND_ERROR_MESSAGE, ExitCode} = require(`../../constants`);
+const {DEFAULT_PORT, HttpCode, NOT_FOUND_ERROR_MESSAGE, SERVICE_UNAVAILABLE_MESSAGE, ExitCode} = require(`../../constants`);
 
 const app = express();
 const logger = getLogger({name: `api`});
@@ -21,12 +21,14 @@ app.use((req, res, next) => {
   next();
 });
 app.use((req, res) => {
+  logger.error(`Route not found: ${req.url}`);
   res.status(HttpCode.NOT_FOUND)
     .send(NOT_FOUND_ERROR_MESSAGE);
-  logger.error(`Route not found: ${req.url}`);
 });
 app.use((err, _req, _res, _next) => {
   logger.error(`An error occurred on processing request: ${err.message}`);
+  _res.status(HttpCode.SERVICE_UNAVAILABLE)
+    .send(SERVICE_UNAVAILABLE_MESSAGE);
 });
 
 module.exports = {
