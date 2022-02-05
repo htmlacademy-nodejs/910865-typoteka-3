@@ -57,7 +57,8 @@ block content
                     p.comments__message #{comment.text}
           if (user)
             .comments__footer.comments__footer--user
-              form(action=`/articles/${article.id}/comments` method='post')
+              form(action=`/articles/${article.id}/comments` method='POST')
+                input(type="hidden" name="_csrf" value=csrfToken)
                 .comments__avatar.avatar
                   img(src=`/img/${user.avatar}` alt='аватар пользователя')
                 label

@@ -1,6 +1,7 @@
 'use strict';
 
 const {Router} = require(`express`);
+const csrf = require(`csurf`);
 
 const {getAPI} = require(`../api`);
 const upload = require(`../middlewares/upload`);
@@ -11,6 +12,7 @@ const {prepareErrors, ensureArray} = require(`../../utils`);
 
 const articlesRouter = new Router();
 const api = getAPI();
+const csrfProtection = csrf();
 
 articlesRouter.get(`/category/:id`, async (req, res) => {
   const page = +req.query.page || 1;
@@ -40,14 +42,14 @@ articlesRouter.get(`/category/:id`, async (req, res) => {
   });
 });
 
-articlesRouter.get(`/add`, authRedirect, checkAdminRole, async (req, res) => {
+articlesRouter.get(`/add`, authRedirect, checkAdminRole, csrfProtection, async (req, res) => {
   const categories = await api.getCategories();
   const {user} = req.session;
 
-  res.render(`articles/post`, {wrapper: {class: `wrapper`}, categories, user});
+  res.render(`articles/post`, {wrapper: {class: `wrapper`}, categories, user, csrfToken: req.csrfToken()});
 });
 
-articlesRouter.post(`/add`, upload.single(`upload`), async (req, res) => {
+articlesRouter.post(`/add`, upload.single(`upload`), csrfProtection, async (req, res) => {
   const {body, file} = req;
   const {user} = req.session;
   const data = {
@@ -71,7 +73,7 @@ articlesRouter.post(`/add`, upload.single(`upload`), async (req, res) => {
   }
 });
 
-articlesRouter.get(`/edit/:id`, authRedirect, checkAdminRole, async (req, res) => {
+articlesRouter.get(`/edit/:id`, authRedirect, checkAdminRole, csrfProtection, async (req, res) => {
   const {id} = req.params;
   const [article, categories] = await Promise.all([
     api.getArticle(id, {comments: false}).catch((err) => console.log(err)),
@@ -83,10 +85,10 @@ articlesRouter.get(`/edit/:id`, authRedirect, checkAdminRole, async (req, res) =
     return res.render(`errors/404`);
   }
 
-  return res.render(`articles/post`, {wrapper: {class: `wrapper`}, article, categories, user});
+  return res.render(`articles/post`, {wrapper: {class: `wrapper`}, article, categories, user, csrfToken: req.csrfToken()});
 });
 
-articlesRouter.post(`/edit/:id`, upload.single(`upload`), async (req, res) => {
+articlesRouter.post(`/edit/:id`, upload.single(`upload`), csrfProtection, async (req, res) => {
   const {id} = req.params;
   const {body, file} = req;
   const {user} = req.session;
@@ -114,7 +116,7 @@ articlesRouter.post(`/edit/:id`, upload.single(`upload`), async (req, res) => {
   }
 });
 
-articlesRouter.get(`/:id`, async (req, res) => {
+articlesRouter.get(`/:id`, csrfProtection, async (req, res) => {
   const {id} = req.params;
   const [article, categoriesList] = await Promise.all([
     api.getArticle(id, {comments: true}).catch((err) => console.log(err)),
@@ -133,7 +135,7 @@ articlesRouter.get(`/:id`, async (req, res) => {
     }
   }));
 
-  return res.render(`articles/post-detail`, {wrapper: {class: `wrapper`}, article, categories, user});
+  return res.render(`articles/post-detail`, {wrapper: {class: `wrapper`}, article, categories, user, csrfToken: req.csrfToken()});
 });
 
 articlesRouter.post(`/:id`, async (req, res) => {
@@ -144,7 +146,7 @@ articlesRouter.post(`/:id`, async (req, res) => {
   res.redirect(`/my`);
 });
 
-articlesRouter.post(`/:id/comments`, async (req, res) => {
+articlesRouter.post(`/:id/comments`, csrfProtection, async (req, res) => {
   const {id} = req.params;
   const {message} = req.body;
   const {user} = req.session;
@@ -159,7 +161,7 @@ articlesRouter.post(`/:id/comments`, async (req, res) => {
       api.getCategories(true)
     ]);
 
-    res.render(`articles/post-detail`, {wrapper: {class: `wrapper`}, article, categories, validationMessages, user});
+    res.render(`articles/post-detail`, {wrapper: {class: `wrapper`}, article, categories, validationMessages, user, csrfToken: req.csrfToken()});
   }
 });
 
