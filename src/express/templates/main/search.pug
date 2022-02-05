@@ -25,6 +25,6 @@ block content
           p.search-page__empty Ничего не нашлось
         each article in results
           .search__result
-            +fullDate(`search__date`, article.createdAt)
+            +cutDate(`search__date`, article.createdAt)
             a.search__link(href=`/articles/${article.id}`)
               | !{article.title}

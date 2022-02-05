@@ -79,7 +79,7 @@ articlesRouter.get(`/edit/:id`, authRedirect, checkAdminRole, async (req, res) =
   ]);
   const {user} = req.session;
 
-  if (!article) { // ?
+  if (!article) {
     return res.render(`errors/404`);
   }
 
@@ -123,7 +123,7 @@ articlesRouter.get(`/:id`, async (req, res) => {
   const categories = [];
   const {user} = req.session;
 
-  if (!article) { // ?
+  if (!article) {
     return res.render(`errors/404`);
   }
 

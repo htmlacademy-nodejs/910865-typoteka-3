@@ -33,9 +33,9 @@ myRouter.get(`/categories`, authRedirect, checkAdminRole, async (req, res) => {
 
 myRouter.post(`/categories`, async (req, res) => {
   try {
-    const newCategory = await api.createCategory({name: req.body[`add-category`]});
+    await api.createCategory({name: req.body[`add-category`]});
 
-    res.redirect(`/articles/category/${newCategory.id}`);
+    res.redirect(`/my/categories`);
   } catch (error) {
     const validationAddMessages = prepareErrors(error);
     const {user} = req.session;
@@ -56,9 +56,9 @@ myRouter.post(`/categories/:id`, async (req, res) => {
   if (action === `update`) {
     try {
       await api.updateCategory(id, {name: newCategoryName});
-      res.redirect(`/articles/category/${id}`);
+      res.redirect(`/my/categories`);
     } catch (error) {
-      // ??? почему при ошибке перебрасывает с /my/categories на /my/categories/${id}
+      // ??? почему при ошибке перебрасывает с /my/categories на /my/categories/${id} при ошибке в редактировании
       const validationEditMessages = prepareErrors(error);
       const errorInputId = parseInt(id, 10);
 
@@ -69,7 +69,7 @@ myRouter.post(`/categories/:id`, async (req, res) => {
   if (action === `delete`) {
     try {
       await api.deleteCategory(id);
-      res.redirect(`my/categories`);
+      res.redirect(`/my/categories`);
     } catch (error) {
       const validationEditMessages = prepareErrors(error);
 

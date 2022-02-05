@@ -6,7 +6,7 @@ module.exports = (req, res, next) => {
   const {user} = req.session;
 
   if (user.id !== 1) {
-    return res.status(HttpCode.FORBIDDEN).send(`Отсутствуют права доступа!`);
+    return res.status(HttpCode.FORBIDDEN).render(`errors/403`);
   }
 
   return next();

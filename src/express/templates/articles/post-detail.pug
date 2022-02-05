@@ -9,7 +9,7 @@ block content
         .post__wrapper
           .post__head
             a.post__backwards.button.button--backwards(href='#') Назад
-            +fullDate(`post__date`, article.createdAt)
+            +cutDate(`post__date`, article.createdAt)
             h2.post__title.title.title--main #{article.title}
             +categoryBlock(categories, true)
           if (article.picture === `sea@1x.jpg`)
@@ -37,7 +37,7 @@ block content
 
               img(src=`/img/${pictureName}` srcset=`/img/${pictureName} 1x, /img/${pictureName} 2x` alt=`${pictureName}`)
           .post__text
-            h3 Бирюзовое доверие
+            h3 #{article.announce}
             if (article.fullText)
               p
                 | #{article.fullText}
@@ -47,13 +47,15 @@ block content
           if (article.comments.length !== 0)
             ul.comments__list
               each comment in article.comments
+                -
+                  console.log(comment);
                 li.comments__comment
                   .comments__avatar.avatar
                     img(src=`/img/${comment.users.avatar}` alt='аватар пользователя')
                   .comments__text
                     .comments__head
                       p #{comment.users.name} #{comment.users.surname} •
-                      +fullDate(`comments__date`, comment.updatedAt)
+                      +fullDate(`comments__date`, comment.createdAt)
                     p.comments__message #{comment.text}
           if (user)
             .comments__footer.comments__footer--user

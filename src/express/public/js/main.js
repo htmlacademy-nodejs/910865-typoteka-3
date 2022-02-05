@@ -327,3 +327,17 @@ if (typeof window === 'undefined' || typeof window.getComputedStyle !== 'functio
 //     autosize(element);
 //   });
 // }
+
+if (window.location.pathname === `/articles/add` || window.location.pathname.split(`/`).includes(`edit`)) {
+  if (document.querySelector(`button.button.button--transparent`)) {
+    document.querySelector(`button.button.button--transparent`).onclick = () => {
+      document.querySelector(`#image-name-field`).value= '';
+    };
+  }
+
+  window.onload = () => {
+    const date = `${new Date().getFullYear()}-${new Date().getMonth() < 9 ? `0${new Date().getMonth() + 1}` : new Date().getMonth() + 1}-${new Date().getDate() < 10 ? `0${new Date().getDate()}` : new Date().getDate()}`;
+
+    document.querySelector(`#new-publication-date`).value = date;
+  };
+}
