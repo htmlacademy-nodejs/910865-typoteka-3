@@ -163,4 +163,12 @@ articlesRouter.post(`/:id/comments`, async (req, res) => {
   }
 });
 
+articlesRouter.post(`/:articleId/comments/:commentId`, async (req, res) => {
+  const {articleId, commentId} = req.params;
+
+  await api.dropComment(articleId, commentId);
+
+  res.redirect(`/my/comments`);
+});
+
 module.exports = articlesRouter;
