@@ -183,7 +183,8 @@ const ErrorCategoryMessage = {
   EMPTY: `Не указано название категории`,
   CATEGORY_NAME_MIN: `Название категории содержит меньше 5 символов`,
   CATEGORY_NAME_MAX: `Название категории содержит более 30 символов`,
-  CATEGORY_EXIST: `Категория уже существует`
+  CATEGORY_EXIST: `Категория уже существует`,
+  CATEGORY_ARTICLES_NOT_EMPTY: [`Категории принадлежит как минимум одна публикация`]
 };
 
 const MIN_CATEGORY_NAME_LENGTH = 5;

@@ -6,6 +6,7 @@ const {getAPI} = require(`../api`);
 const checkAdminRole = require(`../middlewares/check-admin-role`);
 const authRedirect = require(`../middlewares/auth-redirect`);
 const {prepareErrors} = require(`../../utils`);
+const {ErrorCategoryMessage} = require(`../../constants`);
 
 const myRouter = new Router();
 const api = getAPI();
@@ -52,30 +53,44 @@ myRouter.post(`/categories/:id`, async (req, res) => {
   const newCategoryName = req.body[inputFieldName];
   const categories = await api.getCategories();
   const {user} = req.session;
+  const errorInputId = parseInt(id, 10);
 
   if (action === `update`) {
     try {
       await api.updateCategory(id, {name: newCategoryName});
-      res.redirect(`/my/categories`);
+      return res.redirect(`/my/categories`);
     } catch (error) {
-      // ??? почему при ошибке перебрасывает с /my/categories на /my/categories/${id} при ошибке в редактировании
       const validationEditMessages = prepareErrors(error);
-      const errorInputId = parseInt(id, 10);
 
-      res.render(`my/all-categories`, {wrapper: {class: `wrapper wrapper--nobackground`}, categories, errorInputId, validationEditMessages, user});
+      return res.render(`my/all-categories`, {wrapper: {class: `wrapper wrapper--nobackground`}, categories, errorInputId, validationEditMessages, user});
     }
   }
 
   if (action === `delete`) {
+    let hasArticles = false;
+    let removeStatus;
+
     try {
-      await api.deleteCategory(id);
-      res.redirect(`/my/categories`);
+      removeStatus = await api.deleteCategory(id);
+
+      if (removeStatus === false) {
+        hasArticles = true;
+        throw new Error();
+      }
+
+      return res.redirect(`/my/categories`);
     } catch (error) {
+      if (hasArticles) {
+        return res.render(`my/all-categories`, {wrapper: {class: `wrapper wrapper--nobackground`}, categories, errorInputId, validationEditMessages: ErrorCategoryMessage.CATEGORY_ARTICLES_NOT_EMPTY, user});
+      }
+
       const validationEditMessages = prepareErrors(error);
 
-      res.render(`my/all-categories`, {wrapper: {class: `wrapper wrapper--nobackground`}, categories, validationEditMessages, user});
+      return res.render(`my/all-categories`, {wrapper: {class: `wrapper wrapper--nobackground`}, categories, validationEditMessages, user});
     }
   }
+
+  return res.render(`my/all-categories`, {wrapper: {class: `wrapper wrapper--nobackground`}, categories, user});
 });
 
 module.exports = myRouter;
