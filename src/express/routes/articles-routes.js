@@ -136,6 +136,14 @@ articlesRouter.get(`/:id`, async (req, res) => {
   return res.render(`articles/post-detail`, {wrapper: {class: `wrapper`}, article, categories, user});
 });
 
+articlesRouter.post(`/:id`, async (req, res) => {
+  const {id} = req.params;
+
+  await api.dropArticle(id);
+
+  res.redirect(`/my`);
+});
+
 articlesRouter.post(`/:id/comments`, async (req, res) => {
   const {id} = req.params;
   const {message} = req.body;

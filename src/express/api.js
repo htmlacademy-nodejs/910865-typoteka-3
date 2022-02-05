@@ -26,6 +26,12 @@ class API {
     return this._load(`/articles/${id}`, {params: {comments}});
   }
 
+  dropArticle(id) {
+    return this._load(`/articles/${id}`, {
+      method: HttpMethod.DELETE
+    });
+  }
+
   search(query) {
     return this._load(`/search`, {params: {query}});
   }
