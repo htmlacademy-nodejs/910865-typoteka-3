@@ -46,19 +46,20 @@ articlesRouter.get(`/add`, authRedirect, checkAdminRole, csrfProtection, async (
   const categories = await api.getCategories();
   const {user} = req.session;
 
-  res.render(`articles/post`, {wrapper: {class: `wrapper`}, categories, user, csrfToken: req.csrfToken()});
+  res.render(`articles/post-add`, {wrapper: {class: `wrapper`}, categories, user, csrfToken: req.csrfToken()});
 });
 
 articlesRouter.post(`/add`, upload.single(`upload`), csrfProtection, async (req, res) => {
   const {body, file} = req;
   const {user} = req.session;
+  const categoryFormData = ensureArray(body.category);
   const data = {
     title: body.title,
     createdAt: `${body.date} ${new Date(Date.now()).getHours() < 10 ? `0${new Date(Date.now()).getHours()}` : new Date(Date.now()).getHours()}:${new Date(Date.now()).getMinutes() < 10 ? `0${new Date(Date.now()).getMinutes()}` : new Date(Date.now()).getMinutes()}:${new Date(Date.now()).getSeconds() < 10 ? `0${new Date(Date.now()).getSeconds()}` : new Date(Date.now()).getSeconds()}`,
     announce: body.announcement,
     fullText: body[`full-text`],
     picture: file ? file.filename : ``,
-    categories: ensureArray(body.category),
+    categories: categoryFormData[0] !== undefined ? categoryFormData : [],
     userId: user.id
   };
 
@@ -66,10 +67,19 @@ articlesRouter.post(`/add`, upload.single(`upload`), csrfProtection, async (req,
     await api.createArticle(data);
     res.redirect(`/my`);
   } catch (err) {
+    let oldCategoryFormData = data.categories;
     const validationMessages = prepareErrors(err);
     const categories = await api.getCategories();
 
-    res.render(`articles/post`, {wrapper: {class: `wrapper`}, categories, validationMessages, user});
+    if (!oldCategoryFormData.includes(undefined)) {
+      oldCategoryFormData = oldCategoryFormData.map((it) => ({
+        id: parseInt(it, 10),
+      }));
+    }
+
+    data.categories = oldCategoryFormData;
+
+    res.render(`articles/post-add`, {wrapper: {class: `wrapper`}, oldData: data, categories, validationMessages, user, csrfToken: req.csrfToken()});
   }
 });
 
@@ -85,20 +95,21 @@ articlesRouter.get(`/edit/:id`, authRedirect, checkAdminRole, csrfProtection, as
     return res.render(`errors/404`);
   }
 
-  return res.render(`articles/post`, {wrapper: {class: `wrapper`}, article, categories, user, csrfToken: req.csrfToken()});
+  return res.render(`articles/post-edit`, {wrapper: {class: `wrapper`}, article, categories, user, csrfToken: req.csrfToken()});
 });
 
 articlesRouter.post(`/edit/:id`, upload.single(`upload`), csrfProtection, async (req, res) => {
   const {id} = req.params;
   const {body, file} = req;
   const {user} = req.session;
+  const categoryFormData = ensureArray(body.category);
   const data = {
     title: body.title,
     createdAt: `${body.date} ${new Date(Date.now()).getHours() < 10 ? `0${new Date(Date.now()).getHours()}` : new Date(Date.now()).getHours()}:${new Date(Date.now()).getMinutes() < 10 ? `0${new Date(Date.now()).getMinutes()}` : new Date(Date.now()).getMinutes()}:${new Date(Date.now()).getSeconds() < 10 ? `0${new Date(Date.now()).getSeconds()}` : new Date(Date.now()).getSeconds()}`,
     announce: body.announcement,
     fullText: body[`full-text`],
     picture: file ? file.filename : (body.photo || ``),
-    categories: ensureArray(body.category),
+    categories: categoryFormData[0] !== undefined ? categoryFormData : [],
     userId: user.id
   };
 
@@ -106,13 +117,19 @@ articlesRouter.post(`/edit/:id`, upload.single(`upload`), csrfProtection, async 
     await api.updateArticle(id, data);
     res.redirect(`/my`);
   } catch (err) {
+    let oldCategoryFormData = data.categories;
     const validationMessages = prepareErrors(err);
-    const [article, categories] = await Promise.all([
-      api.getArticle(id, {comments: false}),
-      api.getCategories()
-    ]);
+    const categories = await api.getCategories();
 
-    res.render(`articles/post`, {wrapper: {class: `wrapper`}, article, categories, validationMessages, user});
+    if (!oldCategoryFormData.includes(undefined)) {
+      oldCategoryFormData = oldCategoryFormData.map((it) => ({
+        id: parseInt(it, 10),
+      }));
+    }
+
+    data.categories = oldCategoryFormData;
+
+    res.render(`articles/post-edit`, {wrapper: {class: `wrapper`}, article: data, categories, validationMessages, user, csrfToken: req.csrfToken()});
   }
 });
 
