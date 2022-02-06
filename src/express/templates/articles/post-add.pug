@@ -22,7 +22,7 @@ block content
                   ul.form__errors
                     each errorMessage in validationMessages
                       li.form__error #{errorMessage}
-            a.popup__button.button.button--popup-close(aria-label='Закрыть окно')
+            a.popup__button.button.button--popup-close(href="/" aria-label='Закрыть окно')
               | Закрыть
               | окно
             .new-publication__form.form
@@ -37,6 +37,7 @@ block content
                     label
                       input.visually-hidden(type='file' name='upload')
                       | Обзор
+                  button.button.button--transparent(type='button') Удалить
                 .new-publication__category-wrapper
                   each category in categories
                     -

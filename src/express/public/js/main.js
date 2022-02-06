@@ -335,9 +335,20 @@ if (window.location.pathname === `/articles/add` || window.location.pathname.spl
     };
   }
 
-  window.onload = () => {
-    const date = `${new Date().getFullYear()}-${new Date().getMonth() < 9 ? `0${new Date().getMonth() + 1}` : new Date().getMonth() + 1}-${new Date().getDate() < 10 ? `0${new Date().getDate()}` : new Date().getDate()}`;
+  if (window.location.pathname.split(`/`).includes(`edit`)) {
+    window.onload = () => {
+      const date = document.querySelector(`#new-publication-date`).dataset.value;
+      const formattedDate = `${new Date(date).getFullYear()}-${new Date(date).getMonth() < 9 ? `0${new Date(date).getMonth() + 1}` : new Date(date).getMonth() + 1}-${new Date(date).getDate() < 10 ? `0${new Date(date).getDate()}` : new Date(date).getDate()}`;
 
-    document.querySelector(`#new-publication-date`).value = date;
-  };
+      document.querySelector(`#new-publication-date`).value = formattedDate;
+    };
+  }
+
+  if (window.location.pathname === `/articles/add`) {
+    window.onload = () => {
+      const date = `${new Date().getFullYear()}-${new Date().getMonth() < 9 ? `0${new Date().getMonth() + 1}` : new Date().getMonth() + 1}-${new Date().getDate() < 10 ? `0${new Date().getDate()}` : new Date().getDate()}`;
+
+      document.querySelector(`#new-publication-date`).value = date;
+    };
+  }
 }

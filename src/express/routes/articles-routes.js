@@ -58,7 +58,7 @@ articlesRouter.post(`/add`, upload.single(`upload`), csrfProtection, async (req,
     createdAt: `${body.date} ${new Date(Date.now()).getHours() < 10 ? `0${new Date(Date.now()).getHours()}` : new Date(Date.now()).getHours()}:${new Date(Date.now()).getMinutes() < 10 ? `0${new Date(Date.now()).getMinutes()}` : new Date(Date.now()).getMinutes()}:${new Date(Date.now()).getSeconds() < 10 ? `0${new Date(Date.now()).getSeconds()}` : new Date(Date.now()).getSeconds()}`,
     announce: body.announcement,
     fullText: body[`full-text`],
-    picture: file ? file.filename : ``,
+    picture: file ? file.filename : (body.photo || ``),
     categories: categoryFormData[0] !== undefined ? categoryFormData : [],
     userId: user.id
   };
@@ -128,6 +128,7 @@ articlesRouter.post(`/edit/:id`, upload.single(`upload`), csrfProtection, async 
     }
 
     data.categories = oldCategoryFormData;
+    data.id = id;
 
     res.render(`articles/post-edit`, {wrapper: {class: `wrapper`}, article: data, categories, validationMessages, user, csrfToken: req.csrfToken()});
   }

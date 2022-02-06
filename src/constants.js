@@ -26,7 +26,7 @@ const SERVICE_UNAVAILABLE_MESSAGE = `Service unavailable`;
 
 const ARTICLE_PICTURES = [`forest`, `sea`, `skyscraper`];
 
-const FILE_EXTENSIONS = [`.jpg`, `.png`, `.webp`];
+const FILE_EXTENSIONS = [`.jpg`, `.png`];
 
 const UPLOAD_DIR = `../upload/img`;
 
@@ -119,7 +119,7 @@ const ErrorArticleMessage = {
   TITLE_MIN: `Заголовок содержит меньше 30 символов`,
   TITLE_MAX: `Заголовок не может содержать более 250 символов`,
   TITLE_REQUIRED: `Не заполнено поле "Заголовок"`,
-  PICTURE: `Изображение не выбрано или тип изображения не поддерживается`,
+  PICTURE: `Тип изображения не поддерживается`,
   CATEGORIES: `Не выбрана ни одна категория`,
   ANNOUNCE_MIN: `Анонс содержит меньше 30 символов`,
   ANNOUNCE_MAX: `Анонс не может содержать более 250 символов`,

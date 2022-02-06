@@ -23,8 +23,8 @@ const schema = Joi.object({
   createdAt: Joi.string().isoDate().required().messages({
     'string.empty': ErrorArticleMessage.DATE
   }),
-  picture: Joi.string().allow(``).messages({
-    'string.empty': ErrorArticleMessage.PICTURE
+  picture: Joi.string().allow(``).pattern(/\.(?:jpg|png)$/i).messages({
+    'string.pattern.base': ErrorArticleMessage.PICTURE
   }),
   categories: Joi.array().items(
       Joi.number().integer().positive().messages({
