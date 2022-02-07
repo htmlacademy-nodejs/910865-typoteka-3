@@ -91,12 +91,14 @@ const ModelName = {
   CATEGORY: `Category`,
   ARTICLE: `Article`,
   COMMENT: `Comment`,
+  USER: `User`,
 };
 
 const TableName = {
   CATEGORY: `categories`,
   ARTICLE: `articles`,
   COMMENT: `comments`,
+  USER: `users`,
 };
 
 const PiecesInComment = {
@@ -106,7 +108,8 @@ const PiecesInComment = {
 
 const ErrorCommentMessage = {
   TEXT: `Сообщение содердит меньше 20 символов`,
-  EMPTY: `Сообщение не может быть пустым, напишите что-нибудь!`
+  EMPTY: `Сообщение не может быть пустым, напишите что-нибудь!`,
+  USER_ID: `Некорректный идентификатор пользователя`
 };
 
 const MIN_COMMENT_TEXT_LENGTH = 20;
@@ -121,7 +124,23 @@ const ErrorArticleMessage = {
   ANNOUNCE_MAX: `Анонс не может содержать более 250 символов`,
   ANNOUNCE_REQUIRED: `Не заполнено поле "Анонс публикации"`,
   TEXT_MAX: `Текст не может содержать более 1000 символов`,
-  DATE: `Не указана дата публикации`
+  DATE: `Не указана дата публикации`,
+  USER_ID: `Некорректный идентификатор пользователя`
+};
+
+const ErrorRegisterMessage = {
+  NAME: `Имя содержит некорректные символы`,
+  NAME_REQUIRED: `Не заполнено поле "Имя"`,
+  SURNAME: `Фамилия содержит некорректные символы`,
+  SURNAME_REQUIRED: `Не заполнено поле "Фамилия"`,
+  EMAIL: `Некорректный электронный адрес`,
+  EMAIL_REQUIRED: `Не заполнено поле "Электронная почта"`,
+  EMAIL_EXIST: `Электронный адрес уже используется`,
+  PASSWORD: `Пароль содержит меньше 6-ти символов`,
+  PASSWORD_REQUIRED: `Не заполнено поле "Пароль"`,
+  PASSWORD_REPEATED: `Пароли не совпадают`,
+  PASSWORD_REPEATED_REQUIRED: `Не заполнено поле "Повтор пароля"`,
+  AVATAR: `Изображение не выбрано или тип изображения не поддерживается`
 };
 
 const MIN_TITLE_TEXT_LENGTH = 30;
@@ -136,12 +155,16 @@ const MAX_TEXT_TEXT_LENGTH = 1000;
 
 const MIN_CATEGORIES_NUMBER = 1;
 
+const MIN_PASSWORD_LENGTH = 6;
+
 const HttpMethod = {
   GET: `GET`,
   POST: `POST`,
   PUT: `PUT`,
   DELETE: `DELETE`,
 };
+
+const SALT_ROUNDS = 10;
 
 module.exports = {
   DEFAULT_COUNT,
@@ -190,5 +213,8 @@ module.exports = {
   MAX_TEXT_TEXT_LENGTH,
   MIN_CATEGORIES_NUMBER,
   HttpMethod,
-  UPLOAD_DIR_NAME
+  UPLOAD_DIR_NAME,
+  SALT_ROUNDS,
+  MIN_PASSWORD_LENGTH,
+  ErrorRegisterMessage
 };

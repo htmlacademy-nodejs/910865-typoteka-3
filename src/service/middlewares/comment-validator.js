@@ -8,6 +8,9 @@ const schema = Joi.object({
   text: Joi.string().min(MIN_COMMENT_TEXT_LENGTH).required().messages({
     'string.empty': ErrorCommentMessage.EMPTY,
     'string.min': ErrorCommentMessage.TEXT
+  }),
+  userId: Joi.number().integer().positive().required().messages({
+    'number.base': ErrorCommentMessage.USER_ID
   })
 });
 

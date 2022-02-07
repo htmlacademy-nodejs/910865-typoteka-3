@@ -9,12 +9,12 @@ block content
           each comment in article.comments
             li.publication__list-item
               .publication__header
-                img.publication__list-image(src='/img/avatar-small-2.png' width='20' height='20' alt='Аватар пользователя')
-                b.publication__list-name Александр Петров
-                time.publication__item-time(datetime='2019-03-21T20:33') 21.03.2019, 20:33
+                img.publication__list-image(src=`/img/${comment.users.avatar}` width='20' height='20' alt='Аватар пользователя')
+                b.publication__list-name #{comment.users.name} #{comment.users.surname}
+                time.publication__item-time(datetime=`${comment.updatedAt}`) #{`${new Date(comment.updatedAt).getDate() < 10 ? `0${new Date(comment.updatedAt).getDate()}` : new Date(comment.updatedAt).getDate()}.${new Date(comment.updatedAt).getMonth() < 9 ? `0${new Date(comment.updatedAt).getMonth() + 1}` : new Date(comment.updatedAt).getMonth() + 1}.${new Date(comment.updatedAt).getFullYear()}, ${new Date(comment.updatedAt).getHours() < 10 ? `0${new Date(comment.updatedAt).getHours()}` : new Date(comment.updatedAt).getHours()}:${new Date(comment.updatedAt).getMinutes() < 10 ? `0${new Date(comment.updatedAt).getMinutes()}` : new Date(comment.updatedAt).getMinutes()}`}
               a.publication__item-text(href='#')
-                | Главреды «Дождя», Forbes и других СМИ попросили Роскомнадзор разъяснить штрафы за ссылки на сайты.
-              p.publication__text-strong
                 | #{comment.text}
+              p.publication__text-strong
+                | #{article.title}
               button.publication__button.button.button--close-item(type='button')
                 span.visually-hidden Закрыть строку списка

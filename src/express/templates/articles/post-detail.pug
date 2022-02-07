@@ -43,17 +43,18 @@ block content
                 | #{article.fullText}
       .post__wrapper.post__wrapper--comments
         section.post__comments.comments
-          h2.comments__title.title.title--middle Комментарии
-          ul.comments__list
-            each comment in article.comments
-              li.comments__comment
-                .comments__avatar.avatar
-                  img(src='/img/avatar-1.png' alt='аватар пользователя')
-                .comments__text
-                  .comments__head
-                    p Евгений Петров •
-                    +fullDate(`comments__date`, comment.updatedAt)
-                  p.comments__message #{comment.text}
+          h2.comments__title.title.title--middle #{article.comments.length === 0 ? `Комментарии отсутствуют` : `Комментарии`}
+          if (article.comments.length !== 0)
+            ul.comments__list
+              each comment in article.comments
+                li.comments__comment
+                  .comments__avatar.avatar
+                    img(src=`/img/${comment.users.avatar}` alt='аватар пользователя')
+                  .comments__text
+                    .comments__head
+                      p #{comment.users.name} #{comment.users.surname} •
+                      +fullDate(`comments__date`, comment.updatedAt)
+                    p.comments__message #{comment.text}
           .comments__footer.comments__footer--user
             form(action=`/articles/${article.id}/comments` method='POST')
               .comments__avatar.avatar
