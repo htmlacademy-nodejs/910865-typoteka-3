@@ -1,5 +1,7 @@
 'use strict';
 
+const {Sequelize} = require(`sequelize`);
+
 const Aliase = require(`../models/aliase`);
 
 class ArticleService {
@@ -63,6 +65,20 @@ class ArticleService {
     const articles = await this._Article.findAll(options);
 
     return articles.map((article) => article.get());
+  }
+
+  async findMostDiscussed() {
+    return await this._Article.findAll({
+      attributes: {
+        include: [[Sequelize.fn(`COUNT`, Sequelize.col(`comments.id`)), `count`]]
+      },
+      include: [{
+        model: this._Comment,
+        as: Aliase.COMMENTS,
+        attributes: []
+      }],
+      group: [`Article.id`]
+    });
   }
 
   findOne(id, needComments) {

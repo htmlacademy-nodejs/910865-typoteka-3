@@ -15,13 +15,17 @@ module.exports = (app, articleService, commentService) => {
   app.use(`/articles`, articleRoutes);
 
   articleRoutes.get(`/`, async (req, res) => {
-    const {comments, offset, limit, filterOption} = req.query;
+    const {comments, offset, limit, filterOption, needCount} = req.query;
     let result;
 
     if (limit || offset) {
       result = await articleService.findPage({limit, offset, filterOption});
     } else {
       result = await articleService.findAll(comments);
+    }
+
+    if (needCount) {
+      result = await articleService.findMostDiscussed();
     }
 
     res.status(HttpCode.OK)

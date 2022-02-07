@@ -5,7 +5,7 @@ const {Router} = require(`express`);
 const {getAPI} = require(`../api`);
 const upload = require(`../middlewares/upload`);
 const {prepareErrors} = require(`../../utils`);
-const {ARTICLES_PER_PAGE} = require(`../../constants`);
+const {ARTICLES_PER_PAGE, MAX_HOT_ELEMENTS} = require(`../../constants`);
 
 const mainRouter = new Router();
 const api = getAPI();
@@ -14,14 +14,18 @@ mainRouter.get(`/`, async (req, res) => {
   const page = +req.query.page || 1;
   const limit = ARTICLES_PER_PAGE;
   const offset = (page - 1) * ARTICLES_PER_PAGE;
-  const [{count, articles}, categories] = await Promise.all([
+  const [articlesWithComments, hotArticles, {count, articles}, categories] = await Promise.all([
+    api.getArticles({comments: true}),
+    api.getArticles({needCount: true}),
     api.getArticles({limit, offset}),
     api.getCategories(true)
   ]);
   const totalPages = Math.ceil(count / ARTICLES_PER_PAGE);
   const {user} = req.session;
+  const comments = articlesWithComments.map((it) => it.comments).filter((article) => article.length !== 0).flat().slice(0, MAX_HOT_ELEMENTS);
+  const articleCommentsCount = hotArticles.slice(0, MAX_HOT_ELEMENTS);
 
-  res.render(`main/main`, {wrapper: {class: `wrapper`}, articles, page, totalPages, categories, user});
+  res.render(`main/main`, {wrapper: {class: `wrapper`}, comments, articleCommentsCount, articles, page, totalPages, categories, user});
 });
 
 mainRouter.get(`/register`, (req, res) => res.render(`main/sign-up`, {wrapper: {class: `wrapper`}}));
