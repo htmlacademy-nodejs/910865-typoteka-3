@@ -7,7 +7,7 @@ const {getAPI} = require(`../api`);
 const upload = require(`../middlewares/upload`);
 const authRedirect = require(`../middlewares/auth-redirect`);
 const checkAdminRole = require(`../middlewares/check-admin-role`);
-const {ARTICLES_PER_PAGE} = require(`../../constants`);
+const {ARTICLES_PER_PAGE, ErrorArticleMessage} = require(`../../constants`);
 const {prepareErrors, ensureArray} = require(`../../utils`);
 
 const articlesRouter = new Router();
@@ -79,7 +79,7 @@ articlesRouter.post(`/add`, upload.single(`upload`), csrfProtection, async (req,
 
     data.categories = oldCategoryFormData;
 
-    res.render(`articles/post-add`, {wrapper: {class: `wrapper`}, oldData: data, categories, validationMessages, user, csrfToken: req.csrfToken()});
+    res.render(`articles/post-add`, {wrapper: {class: `wrapper`}, ErrorArticleMessage, oldData: data, categories, validationMessages, user, csrfToken: req.csrfToken()});
   }
 });
 
@@ -130,7 +130,7 @@ articlesRouter.post(`/edit/:id`, upload.single(`upload`), csrfProtection, async 
     data.categories = oldCategoryFormData;
     data.id = id;
 
-    res.render(`articles/post-edit`, {wrapper: {class: `wrapper`}, article: data, categories, validationMessages, user, csrfToken: req.csrfToken()});
+    res.render(`articles/post-edit`, {wrapper: {class: `wrapper`}, ErrorArticleMessage, article: data, categories, validationMessages, user, csrfToken: req.csrfToken()});
   }
 });
 
