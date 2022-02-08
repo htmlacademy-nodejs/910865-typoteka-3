@@ -352,3 +352,9 @@ if (window.location.pathname === `/articles/add` || window.location.pathname.spl
     };
   }
 }
+
+if (document.querySelector(`.post__backwards`)) {
+  document.querySelector(`.post__backwards`).onclick = () => {
+    window.history.back();
+  };
+}
