@@ -328,29 +328,27 @@ if (typeof window === 'undefined' || typeof window.getComputedStyle !== 'functio
 //   });
 // }
 
-if (window.location.pathname === `/articles/add` || window.location.pathname.split(`/`).includes(`edit`)) {
-  if (document.querySelector(`button.button.button--transparent`)) {
-    document.querySelector(`button.button.button--transparent`).onclick = () => {
-      document.querySelector(`#image-name-field`).value= '';
-    };
-  }
+if (document.querySelector(`button.button.button--transparent`)) {
+  document.querySelector(`button.button.button--transparent`).onclick = () => {
+    document.querySelector(`#image-name-field`).value= '';
+  };
+}
 
-  if (window.location.pathname.split(`/`).includes(`edit`)) {
-    window.onload = () => {
-      const date = document.querySelector(`#new-publication-date`).dataset.value;
-      const formattedDate = `${new Date(date).getFullYear()}-${new Date(date).getMonth() < 9 ? `0${new Date(date).getMonth() + 1}` : new Date(date).getMonth() + 1}-${new Date(date).getDate() < 10 ? `0${new Date(date).getDate()}` : new Date(date).getDate()}`;
+if (window.location.pathname === `/articles/add`) {
+  window.onload = () => {
+    const date = `${new Date().getFullYear()}-${new Date().getMonth() < 9 ? `0${new Date().getMonth() + 1}` : new Date().getMonth() + 1}-${new Date().getDate() < 10 ? `0${new Date().getDate()}` : new Date().getDate()}`;
 
-      document.querySelector(`#new-publication-date`).value = formattedDate;
-    };
-  }
+    document.querySelector(`#new-publication-date`).value = date;
+  };
+}
 
-  if (window.location.pathname === `/articles/add`) {
-    window.onload = () => {
-      const date = `${new Date().getFullYear()}-${new Date().getMonth() < 9 ? `0${new Date().getMonth() + 1}` : new Date().getMonth() + 1}-${new Date().getDate() < 10 ? `0${new Date().getDate()}` : new Date().getDate()}`;
+if (window.location.pathname.split(`/`).includes(`edit`)) {
+  window.onload = () => {
+    const date = document.querySelector(`#new-publication-date`).dataset.value;
+    const formattedDate = `${new Date(date).getFullYear()}-${new Date(date).getMonth() < 9 ? `0${new Date(date).getMonth() + 1}` : new Date(date).getMonth() + 1}-${new Date(date).getDate() < 10 ? `0${new Date(date).getDate()}` : new Date(date).getDate()}`;
 
-      document.querySelector(`#new-publication-date`).value = date;
-    };
-  }
+    document.querySelector(`#new-publication-date`).value = formattedDate;
+  };
 }
 
 if (document.querySelector(`.post__backwards`)) {
