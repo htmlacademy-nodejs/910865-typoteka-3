@@ -1,0 +1,81 @@
+extends ../layout
+
+block content
+  main
+    section
+      .popup.popup--new-publication.popup--anti
+        .new-publication
+          form(action=`/articles/edit/${article.id}` method='POST' enctype='multipart/form-data')
+            input(type="hidden" name="_csrf" value=csrfToken)
+            .new-publication__header
+              h1 Редактирование публикации
+              .new-publication__date-form
+                h3 Дата публикации
+                .new-publication__date-form-division
+                  .new-publication__date-block
+                    label(for='new-publication-date' aria-label='Календарь')
+                    input#new-publication-date(type='text' name='date' placeholder='2019-03-21' data-value=article.createdAt)
+              button.new-publication__button.button.button--colored(type='submit') Опубликовать
+            a.popup__button.button.button--popup-close(href="/" aria-label='Закрыть окно')
+              | Закрыть
+              | окно
+            .new-publication__form.form
+              .form__wrapper.form__wrapper--intro
+                .form__field
+                  label
+                    input(type='text' name='title' placeholder='Заголовок' value=`${article ? article.title : ``}`)
+                if (validationMessages)
+                  if (validationMessages.includes(ErrorArticleMessage.TITLE_REQUIRED) || validationMessages.includes(ErrorArticleMessage.TITLE_MIN) || validationMessages.includes(ErrorArticleMessage.TITLE_MAX))
+                    if (validationMessages.includes(ErrorArticleMessage.TITLE_REQUIRED))
+                      p.form__error-message #{validationMessages[validationMessages.findIndex((it) => it === ErrorArticleMessage.TITLE_REQUIRED)]}
+                    if (validationMessages.includes(ErrorArticleMessage.TITLE_MIN))
+                      p.form__error-message #{validationMessages[validationMessages.findIndex((it) => it === ErrorArticleMessage.TITLE_MIN)]}
+                    if (validationMessages.includes(ErrorArticleMessage.TITLE_MAX))
+                      p.form__error-message #{validationMessages[validationMessages.findIndex((it) => it === ErrorArticleMessage.TITLE_MAX)]}
+                .form__field.form__field--post-image
+                  label
+                    input#image-name-field(type='text' name='photo' placeholder='Фотография' value=(article ? article.picture : ``) readonly='')
+                  .form__image-loader.form__image-loader--publication
+                    label
+                      input.visually-hidden(type='file' name='upload')
+                      | Обзор
+                  button.button.button--transparent(type='button') Удалить
+                if (validationMessages)
+                  if (validationMessages.includes(ErrorArticleMessage.PICTURE))
+                    p.form__error-message #{validationMessages[validationMessages.findIndex((it) => it === ErrorArticleMessage.PICTURE)]}
+                .new-publication__category-wrapper
+                  each category in categories
+                    -
+                      let isChecked = false;
+
+                      if (article) {
+                        isChecked = article.categories.map((it) => it.id).includes(category.id);
+                      }
+
+                    .new-publication__checkbox.new-publication__checkbox--auto
+                      input(id=`checkbox-${category.id}` type='checkbox' name=`category` value=`${category.id}` checked=isChecked==true)
+                      label(for=`checkbox-${category.id}`) #{category.name}
+                  a.new-publication__form-link.button.button--transparent(href='/my/categories') Добавить категорию
+                if (validationMessages)
+                  if (validationMessages.includes(ErrorArticleMessage.CATEGORIES))
+                    p.form__error-message #{validationMessages[validationMessages.findIndex((it) => it === ErrorArticleMessage.CATEGORIES)]}
+              .form__wrapper.form__wrapper--text
+                .form__field.form__field--publication-text
+                  label
+                    textarea(rows='5' name='announcement' placeholder='Анонс публикации')
+                      | #{article ? article.announce : ``}
+                    if (validationMessages)
+                      if (validationMessages.includes(ErrorArticleMessage.ANNOUNCE_REQUIRED) || validationMessages.includes(ErrorArticleMessage.ANNOUNCE_MIN) || validationMessages.includes(ErrorArticleMessage.ANNOUNCE_MAX))
+                        if (validationMessages.includes(ErrorArticleMessage.ANNOUNCE_REQUIRED))
+                          p.form__error-message #{validationMessages[validationMessages.findIndex((it) => it === ErrorArticleMessage.ANNOUNCE_REQUIRED)]}
+                        if (validationMessages.includes(ErrorArticleMessage.ANNOUNCE_MIN))
+                          p.form__error-message #{validationMessages[validationMessages.findIndex((it) => it === ErrorArticleMessage.ANNOUNCE_MIN)]}
+                        if (validationMessages.includes(ErrorArticleMessage.ANNOUNCE_MAX))
+                          p.form__error-message #{validationMessages[validationMessages.findIndex((it) => it === ErrorArticleMessage.ANNOUNCE_MAX)]}
+                .form__field.form__field--publication-text
+                  label
+                    textarea(rows='10' name='full-text' placeholder='Полный текст публикации')
+                      | #{article ? article.fullText : ``}
+                    if (validationMessages)
+                      if (validationMessages.includes(ErrorArticleMessage.TEXT_MAX))
+                        p.form__error-message #{validationMessages[validationMessages.findIndex((it) => it === ErrorArticleMessage.TEXT_MAX)]}

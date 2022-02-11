@@ -1,0 +1,14 @@
+extends ../layout
+
+block content
+  main.main-page.main-page--padding
+    section.main-page__notes.notes
+      h1.notes__title Мои записи
+      ul.notes__list
+        each article in articles
+          li.notes__list-item
+            form(action=`/articles/${article.id}` method="POST")
+              +cutDate(`notes__item-time`, article.createdAt)
+              a.notes__item-text(href=`/articles/${article.id}`) #{article.title}
+              button.notes__button.button.button--close-item(type='submit')
+                span.visually-hidden Закрыть строку списка

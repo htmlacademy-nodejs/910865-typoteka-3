@@ -79,20 +79,26 @@ const mockArticles = [
   }
 ];
 
-const mockDB = new Sequelize(`sqlite::memory:`, {logging: false});
-const app = express();
+const createAPI = async () => {
+  const mockDB = new Sequelize(`sqlite::memory:`, {logging: false});
 
-app.use(express.json());
-
-beforeAll(async () => {
   await initDB(mockDB, {categories: mockCategories, articles: mockArticles, users: mockUsers});
+
+  const app = express();
+
+  app.use(express.json());
   category(app, new CategoryService(mockDB));
-});
+
+  return app;
+};
+
+let app;
 
 describe(`API returns category list`, () => {
   let response;
 
   beforeAll(async () => {
+    app = await createAPI();
     response = await request(app)
       .get(`/categories`);
   });
@@ -103,5 +109,138 @@ describe(`API returns category list`, () => {
     expect(response.body.map((it) => it.name)).toEqual(
       expect.arrayContaining(["Деревья", "За жизнь", "IT", "Разное"])
     );
+  });
+});
+
+describe(`API creates category if data is valid`, () => {
+  let response;
+  const validCategoryData = {
+    name: `TEST NAME`
+  };
+
+  beforeAll(async () => {
+    app = await createAPI();
+    response = await request(app)
+      .post(`/categories`)
+      .send(validCategoryData);
+  });
+
+  test(`Status code 201`, () => expect(response.statusCode).toBe(HttpCode.CREATED));
+  test(`Returns correct data of created category`, () => {
+    expect(response.body.name).toBe(`TEST NAME`);
+  });
+});
+
+describe(`API refuses to create category if data is invalid`, () => {
+  let response;
+  const validCategoryData = {
+    not_name: `TEST NAME`
+  };
+
+  beforeAll(async () => {
+    app = await createAPI();
+    response = await request(app)
+      .post(`/categories`)
+      .send(validCategoryData);
+  });
+
+  test(`Status code 400`, () => expect(response.statusCode).toBe(HttpCode.BAD_REQUEST));
+  test(`Returns correct data of created category`, async () => {
+    await request(app)
+        .get(`/categories`)
+        .expect((res) => expect(res.body.length).toBe(4));
+  });
+});
+
+describe(`API updates category if data is valid`, () => {
+  let response;
+  const validCategoryData = {
+    name: `TEST NAME`
+  };
+
+  beforeAll(async () => {
+    app = await createAPI();
+    response = await request(app)
+      .put(`/categories/1`)
+      .send(validCategoryData);
+  });
+
+  test(`Status code 200`, () => expect(response.statusCode).toBe(HttpCode.OK));
+  test(`Returns correct amout of categories`, async () => {
+    await request(app)
+        .get(`/categories`)
+        .expect((res) => expect(res.body.length).toBe(4));
+  });
+  test(`Returns correct data of updated category`, async () => {
+    await request(app)
+        .get(`/categories`)
+        .expect((res) => expect(res.body[0].name).toBe(`TEST NAME`));
+  });
+  test(`Category names are "TEST NAME", "За жизнь", "IT", "Разное"`, async () => {
+    await request(app)
+        .get(`/categories`)
+        .expect((res) => expect(res.body.map((it) => it.name)).toEqual(
+          expect.arrayContaining(["TEST NAME", "За жизнь", "IT", "Разное"])
+        )
+   );
+  });
+});
+
+describe(`API refuses to update category if data is invalid`, () => {
+  let response;
+  const invalidCategoryData = {
+    not_name: `TEST NAME`
+  };
+
+  beforeAll(async () => {
+    app = await createAPI();
+    response = await request(app)
+      .put(`/categories/1`)
+      .send(invalidCategoryData);
+  });
+
+  test(`Status code 400`, () => expect(response.statusCode).toBe(HttpCode.BAD_REQUEST));
+  test(`Returns correct amout of categories`, async () => {
+    await request(app)
+        .get(`/categories`)
+        .expect((res) => expect(res.body.length).toBe(4));
+  });
+  test(`Returns correct data of category tried to update`, async () => {
+    await request(app)
+        .get(`/categories`)
+        .expect((res) => expect(res.body[0].name).toBe(`Деревья`));
+  });
+  test(`Category names are "Деревья", "За жизнь", "IT", "Разное"`, async () => {
+    await request(app)
+        .get(`/categories`)
+        .expect((res) => expect(res.body.map((it) => it.name)).toEqual(
+          expect.arrayContaining(["Деревья", "За жизнь", "IT", "Разное"])
+        )
+   );
+  });
+});
+
+describe(`API correctly deletes category`, () => {
+  let response;
+
+  beforeAll(async () => {
+    app = await createAPI();
+    response = await request(app)
+      .delete(`/categories/1`);
+  });
+
+  test(`Status code 200`, () => expect(response.statusCode).toBe(HttpCode.OK));
+  test(`Returns correct amout of categories`, async () => {
+    await request(app)
+        .get(`/categories`)
+        .expect((res) => expect(res.body.length).toBe(3));
+  });
+  test(`Category names are "За жизнь", "IT", "Разное"`, async () => {
+    await request(app)
+        .get(`/categories`)
+        .expect((res) => expect(res.body.map((it) => it.name)).toEqual(
+          expect.arrayContaining(["За жизнь", "IT", "Разное"])
+        )
+   );
   });
 });

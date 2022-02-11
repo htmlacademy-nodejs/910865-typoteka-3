@@ -15,13 +15,17 @@ module.exports = (app, articleService, commentService) => {
   app.use(`/articles`, articleRoutes);
 
   articleRoutes.get(`/`, async (req, res) => {
-    const {comments, offset, limit, filterOption} = req.query;
+    const {comments, offset, limit, filterOption, needCount} = req.query;
     let result;
 
     if (limit || offset) {
       result = await articleService.findPage({limit, offset, filterOption});
     } else {
       result = await articleService.findAll(comments);
+    }
+
+    if (needCount) {
+      result = await articleService.findMostDiscussed();
     }
 
     res.status(HttpCode.OK)
@@ -32,11 +36,6 @@ module.exports = (app, articleService, commentService) => {
     const {articleId} = req.params;
     const {comments} = req.query;
     const article = await articleService.findOne(articleId, comments);
-
-    if (!article) {
-      return res.status(HttpCode.NOT_FOUND)
-        .send(`Not found with ${articleId}`);
-    }
 
     return res.status(HttpCode.OK)
       .json(article);
@@ -64,22 +63,19 @@ module.exports = (app, articleService, commentService) => {
     if (req.body.categories) {
       const article = await articleService.findOne(articleId);
 
-      await article.categories.forEach((it) => article.removeCategory(it));
-      await article.addCategories(req.body.categories);
+      await Promise.all([
+        article.categories.forEach((it) => article.removeCategory(it)),
+        article.addCategories(req.body.categories)
+      ]);
     }
 
     res.status(HttpCode.OK)
       .json(articleUpdateStatus);
   });
 
-  articleRoutes.delete(`/:articleId`, routeParamsValidator, async (req, res) => {
+  articleRoutes.delete(`/:articleId`, routeParamsValidator, articleExist(articleService), async (req, res) => {
     const {articleId} = req.params;
     const article = await articleService.drop(articleId);
-
-    if (!article) {
-      return res.status(HttpCode.NOT_FOUND)
-        .send(NOT_FOUND_ERROR_MESSAGE);
-    }
 
     return res.status(HttpCode.OK)
       .json(article);
@@ -103,13 +99,9 @@ module.exports = (app, articleService, commentService) => {
 
   articleRoutes.post(`/:articleId/comments`, [routeParamsValidator, commentValidator, articleExist(articleService)], async (req, res) => {
     const {article} = res.locals;
-    const {text} = req.body;
+    const {text, userId} = req.body;
 
-    if (!text) {
-      return res.status(HttpCode.BAD_REQUEST).json([]);
-    }
-
-    const comment = await commentService.create(article.id, text);
+    const comment = await commentService.create(article.id, userId, text);
 
     return res.status(HttpCode.CREATED)
       .json(comment);

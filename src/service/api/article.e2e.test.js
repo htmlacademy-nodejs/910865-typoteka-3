@@ -170,7 +170,8 @@ describe(`API refuses to create an article if data is invalid`, () => {
     "announce":"test announce test announce test announce test announce",
     "fullText":"test text",
     "category":[2,3],
-    "pictures": ""
+    "pictures": "",
+    "userId": 1
   };
 
   test(`Without any required property response code is 400`, async () => {

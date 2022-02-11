@@ -1,5 +1,7 @@
 'use strict';
 
+const {Sequelize} = require(`sequelize`);
+
 const Aliase = require(`../models/aliase`);
 
 class ArticleService {
@@ -27,6 +29,7 @@ class ArticleService {
   }
 
   async findAll(needComments) {
+    const options = {};
     const include = [
       Aliase.CATEGORIES,
       {
@@ -39,6 +42,9 @@ class ArticleService {
     ];
 
     if (needComments) {
+      options.order = [
+        [{model: this._Comment, as: Aliase.COMMENTS}, `createdAt`, `DESC`]
+      ];
       include.push({
         model: this._Comment,
         as: Aliase.COMMENTS,
@@ -54,34 +60,62 @@ class ArticleService {
       });
     }
 
-    const articles = await this._Article.findAll({
-      include,
-      order: [
-        [`createdAt`, `DESC`]
-      ],
-    });
+    options.include = include;
+
+    const articles = await this._Article.findAll(options);
 
     return articles.map((article) => article.get());
   }
 
+  async findMostDiscussed() {
+    return await this._Article.findAll({
+      attributes: {
+        include: [[Sequelize.fn(`COUNT`, Sequelize.col(`comments.id`)), `count`]]
+      },
+      include: [{
+        model: this._Comment,
+        as: Aliase.COMMENTS,
+        attributes: []
+      }],
+      group: [`Article.id`]
+    });
+  }
+
   findOne(id, needComments) {
-    const include = [Aliase.CATEGORIES];
+    const include = [
+      Aliase.CATEGORIES,
+      {
+        model: this._User,
+        as: Aliase.USERS,
+        attributes: {
+          exclude: [`passwordHash`]
+        }
+      }
+    ];
+    const options = {};
 
     if (needComments) {
+      options.order = [
+        [{model: this._Comment, as: Aliase.COMMENTS}, `createdAt`, `DESC`]
+      ];
       include.push({
         model: this._Comment,
         as: Aliase.COMMENTS,
-        include: {
-          model: this._User,
-          as: Aliase.USERS,
-          attributes: {
-            exclude: [`passwordHash`]
+        include: [
+          {
+            model: this._User,
+            as: Aliase.USERS,
+            attributes: {
+              exclude: [`passwordHash`]
+            }
           }
-        }
+        ]
       });
     }
 
-    return this._Article.findByPk(id, {include});
+    options.include = include;
+
+    return this._Article.findByPk(id, options);
   }
 
   async update(id, articleData) {

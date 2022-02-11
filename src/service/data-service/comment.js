@@ -14,9 +14,10 @@ class CommentService {
     return !!deletedRows;
   }
 
-  async create(articleId, text) {
+  async create(articleId, userId, text) {
     return this._Comment.create({
       articleId,
+      userId,
       text
     });
   }

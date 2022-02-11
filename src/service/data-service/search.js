@@ -33,7 +33,7 @@ class SearchService {
         }
       ],
       order: [
-        [`createdAt`, `DESC`]
+        [`createdAt`, `ASC`]
       ]
     });
 

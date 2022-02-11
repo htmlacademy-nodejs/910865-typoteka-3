@@ -1,0 +1,27 @@
+extends ../layout
+
+block content
+  main.main-page.main-page--padding
+    section.main-page__category.category
+      h1.category__title Категории
+      .category__add-form
+        form(action='/my/categories' method='POST')
+          input#add-form-add-category(type='text' name='add-category' placeholder='Новая категория')
+          label(for='add-form-add-category')
+            span.visually-hidden Добавить категорию
+          button.category__button.button.button--category(type='submit') Добавить
+      if (validationAddMessages)
+        each message in validationAddMessages
+          p.form__error-message(style="text-align: center") #{message}
+      ul.category__list
+        each category in categories
+          li.category__list-item
+            form(action=`/my/categories/${category.id}` method='POST')
+              input(id=`modify-form-category-${category.id}` type='text' name=`category-${category.id}` value=category.name)
+              label(for=`modify-form-category-${category.id}`)
+                span.visually-hidden Редактировать категорию
+              button.category__button.button.button--category(type='submit' name='action' value='update') Сохранить
+              button.category__button.button.button--category(type='submit' name='action' value='delete') Удалить
+          if (validationEditMessages && (category.id === errorInputId))
+            each message in validationEditMessages
+              p.form__error-message(style="text-align: center") #{message}

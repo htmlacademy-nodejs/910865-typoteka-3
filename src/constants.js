@@ -22,9 +22,11 @@ const MAX_ELEMENT_COUNT_MESSAGE = `No more than 1000 publications`;
 
 const NOT_FOUND_ERROR_MESSAGE = `Not found`;
 
+const SERVICE_UNAVAILABLE_MESSAGE = `Service unavailable`;
+
 const ARTICLE_PICTURES = [`forest`, `sea`, `skyscraper`];
 
-const FILE_EXTENSIONS = [`.jpg`, `.png`, `.webp`];
+const FILE_EXTENSIONS = [`.jpg`, `.png`];
 
 const UPLOAD_DIR = `../upload/img`;
 
@@ -69,12 +71,11 @@ const HttpCode = {
   OK: 200,
   NOT_FOUND: 404,
   INTERNAL_SERVER_ERROR: 500,
+  SERVICE_UNAVAILABLE: 503,
   FORBIDDEN: 403,
   UNAUTHORIZED: 401,
   CREATED: 201,
-  EMPTY_LIST: 204,
-  BAD_REQUEST: 400,
-  UNPROCESSABLE_ENTITY: 422,
+  BAD_REQUEST: 400
 };
 
 const MockGenerationStatus = {
@@ -118,7 +119,7 @@ const ErrorArticleMessage = {
   TITLE_MIN: `Заголовок содержит меньше 30 символов`,
   TITLE_MAX: `Заголовок не может содержать более 250 символов`,
   TITLE_REQUIRED: `Не заполнено поле "Заголовок"`,
-  PICTURE: `Изображение не выбрано или тип изображения не поддерживается`,
+  PICTURE: `Тип изображения не поддерживается`,
   CATEGORIES: `Не выбрана ни одна категория`,
   ANNOUNCE_MIN: `Анонс содержит меньше 30 символов`,
   ANNOUNCE_MAX: `Анонс не может содержать более 250 символов`,
@@ -143,6 +144,11 @@ const ErrorRegisterMessage = {
   AVATAR: `Изображение не выбрано или тип изображения не поддерживается`
 };
 
+const ErrorAuthMessage = {
+  EMAIL: `Электронный адрес не существует`,
+  PASSWORD: `Неверный пароль`
+};
+
 const MIN_TITLE_TEXT_LENGTH = 30;
 
 const MAX_TITLE_TEXT_LENGTH = 250;
@@ -165,6 +171,27 @@ const HttpMethod = {
 };
 
 const SALT_ROUNDS = 10;
+
+const SESSION_SECRET_IS_NOT_DEFINED_MESSAGE = `SESSION_SECRET environment variable is not defined`;
+
+const SessionStore = {
+  EXPIRATION: 180000,
+  CHECK_EXPIRATION_INTERVAL: 60000
+};
+
+const ErrorCategoryMessage = {
+  EMPTY: `Не указано название категории`,
+  CATEGORY_NAME_MIN: `Название категории содержит меньше 5 символов`,
+  CATEGORY_NAME_MAX: `Название категории содержит более 30 символов`,
+  CATEGORY_EXIST: `Категория уже существует`,
+  CATEGORY_ARTICLES_NOT_EMPTY: [`Категории принадлежит как минимум одна публикация`]
+};
+
+const MIN_CATEGORY_NAME_LENGTH = 5;
+
+const MAX_CATEGORY_NAME_LENGTH = 30;
+
+const MAX_HOT_ELEMENTS = 4;
 
 module.exports = {
   DEFAULT_COUNT,
@@ -216,5 +243,13 @@ module.exports = {
   UPLOAD_DIR_NAME,
   SALT_ROUNDS,
   MIN_PASSWORD_LENGTH,
-  ErrorRegisterMessage
+  ErrorRegisterMessage,
+  ErrorAuthMessage,
+  SESSION_SECRET_IS_NOT_DEFINED_MESSAGE,
+  SessionStore,
+  ErrorCategoryMessage,
+  MIN_CATEGORY_NAME_LENGTH,
+  MAX_CATEGORY_NAME_LENGTH,
+  SERVICE_UNAVAILABLE_MESSAGE,
+  MAX_HOT_ELEMENTS
 };
