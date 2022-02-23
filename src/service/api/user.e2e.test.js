@@ -9,7 +9,6 @@ const {HttpCode} = require(`../../constants`);
 const initDb = require("../lib/init-db");
 const passwordUtils = require(`../lib/password`);
 const UserService = require("../data-service/user");
-const { response } = require("express");
 
 const mockCategories = [
   `Деревья`,

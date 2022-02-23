@@ -244,3 +244,28 @@ describe(`API correctly deletes category`, () => {
    );
   });
 });
+
+describe(`API correctly works if trying to delete non-existent category id`, () => {
+  let response;
+
+  beforeAll(async () => {
+    app = await createAPI();
+    response = await request(app)
+      .delete(`/categories/189`);
+  });
+
+  test(`Status code 200`, () => expect(response.statusCode).toBe(HttpCode.OK));
+  test(`Returns correct amout of categories`, async () => {
+    await request(app)
+        .get(`/categories`)
+        .expect((res) => expect(res.body.length).toBe(4));
+  });
+  test(`Category names are "За жизнь", "IT", "Разное"`, async () => {
+    await request(app)
+        .get(`/categories`)
+        .expect((res) => expect(res.body.map((it) => it.name)).toEqual(
+          expect.arrayContaining(["За жизнь", "IT", "Разное"])
+        )
+   );
+  });
+});

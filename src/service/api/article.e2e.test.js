@@ -350,6 +350,21 @@ describe(`API deletes comment correctly`, () => {
   });
 });
 
+describe(`API works correctly if trying to delete non-existent comment`, () => {
+  beforeAll(async () => {
+    app = await createAPI();
+    response = await request(app)
+      .delete(`/articles/1/comments/1000`);
+  });
+
+  test(`API returns status code 404`, () => expect(response.statusCode).toEqual(HttpCode.NOT_FOUND));
+  test(`API returns correct amount of comments`, () => {
+    request(app)
+      .get(`/articles/1/comments/`)
+      .expect((res) => expect(res.body.length).toEqual(2));
+  });
+});
+
 describe(`API works correctly while getting article's comments`, () => {
   beforeAll(async () => {
     app = await createAPI();
